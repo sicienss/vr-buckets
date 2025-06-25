@@ -35,7 +35,7 @@ public class LobbyController : MonoBehaviour
         MatchManager.instance.realtime.didConnectToRoom -= OnConnected;
 
         // Instantiate networked Player prefab -- NOTE: Down stream event handlers will spawn rows in UI to show players in room
-        Realtime.Instantiate("Player", ownedByClient: true, preventOwnershipTakeover: true);
+        Realtime.Instantiate("Player", true);
     }
 
     private void OnEnable()

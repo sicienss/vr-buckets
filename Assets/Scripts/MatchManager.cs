@@ -61,13 +61,7 @@ public class MatchManager : MonoBehaviour
         }
     }
 
-    public void CreateRandomRoom()
-    {
-        string code = GenerateMatchCode(6);
-        TryJoinRoom(code);
-    }
-
-    private string GenerateMatchCode(int length)
+    public string GenerateMatchCode(int length)
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         System.Random random = new System.Random();

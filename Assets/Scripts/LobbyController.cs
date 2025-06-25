@@ -25,15 +25,6 @@ public class LobbyController : MonoBehaviour
             Debug.LogWarning("MatchManager instance is missing!");
         }
 
-        // Subscribe
-        MatchManager.instance.realtime.didConnectToRoom += OnConnected;
-    }
-
-    void OnConnected(Realtime realtime)
-    {
-        // Unsubscribe
-        MatchManager.instance.realtime.didConnectToRoom -= OnConnected;
-
         // Instantiate networked Player prefab -- NOTE: Down stream event handlers will spawn rows in UI to show players in room
         Realtime.Instantiate("Player", true);
     }
@@ -47,6 +38,7 @@ public class LobbyController : MonoBehaviour
     private void OnDisable()
     {
         PlayerComponent.OnPlayerSpawned -= HandlePlayerSpawned;
+        PlayerComponent.OnPlayerDespawned -= HandlePlayerDespawned;
     }
 
     void HandlePlayerSpawned(PlayerComponent pc)

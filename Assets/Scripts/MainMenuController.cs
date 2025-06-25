@@ -53,11 +53,8 @@ public class MainMenuController : MonoBehaviour
     public void OnCreateMatchClicked()
     {
         // Create Normcore room w/ random match code
-        MatchManager.instance.CreateRandomRoom();
-
-        // Change scenes
-        SceneManager.UnloadScene("MainMenuScene");
-        SceneManager.LoadScene("LobbyScene", LoadSceneMode.Additive);
+        string code = MatchManager.instance.GenerateMatchCode(3);
+        MatchManager.instance.TryJoinRoom(code); // Callbacks below will fire in response to success or failure       
     }
 
     public void OnJoinMatchClicked()

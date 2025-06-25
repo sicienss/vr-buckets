@@ -18,8 +18,28 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
 
     void Start()
     {
-        // Only enable XR rig for local player
-        xrRigRoot.SetActive(realtimeView.isOwnedLocally);
+        if (realtimeView.isOwnedLocally)
+        {
+            // Enable XR rig for local input
+            xrRigRoot.SetActive(true);
+            leftControllerAnchor.gameObject.SetActive(true);
+            rightControllerAnchor.gameObject.SetActive(true);
+
+            // Ensure hands are visible to self
+            leftHandTransform.gameObject.SetActive(true);
+            rightHandTransform.gameObject.SetActive(true);
+        }
+        else
+        {
+            // Disable camera and XR input for remote players
+            xrRigRoot.SetActive(false);
+            leftControllerAnchor.gameObject.SetActive(false);
+            rightControllerAnchor.gameObject.SetActive(false);
+
+            // Ensure hands are visible to others
+            leftHandTransform.gameObject.SetActive(true);
+            rightHandTransform.gameObject.SetActive(true);
+        }
     }
 
     protected override void OnRealtimeModelReplaced(PlayerModel previousModel, PlayerModel currentModel)
@@ -64,7 +84,7 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
     {
         if (!realtimeView.isOwnedLocally) return;
 
-        // Owner updates hand position to match controller position and transform is synced by Normcore using RealtimeTransform
+        // Owner update hand position
         leftHandTransform.position = leftControllerAnchor.position;
         leftHandTransform.rotation = leftControllerAnchor.rotation;
 

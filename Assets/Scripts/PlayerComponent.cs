@@ -40,6 +40,13 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
             leftHandTransform.gameObject.SetActive(true);
             rightHandTransform.gameObject.SetActive(true);
         }
+
+        // Ensure cascading ownership of child networked objects
+        if (realtimeView.isOwnedLocally)
+        {
+            leftHandTransform.GetComponent<RealtimeTransform>().RequestOwnership();
+            rightHandTransform.GetComponent<RealtimeTransform>().RequestOwnership();
+        }
     }
 
     protected override void OnRealtimeModelReplaced(PlayerModel previousModel, PlayerModel currentModel)

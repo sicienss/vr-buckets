@@ -7,9 +7,15 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
     public PlayerModel Model => model; // Getter to access the model from outside this class
     public static event Action<PlayerComponent> OnPlayerSpawned;
     public static event Action<PlayerComponent> OnPlayerDespawned;
-
     private static readonly string[] namePool = { "BigBaller", "SkyJam", "DunkMan", "BigJoe", "AirAce", "Hoopster", "Bucketz", "FastBreak" };
     // ^ TODO: Move this somewhere better
+    [SerializeField] GameObject xrRigRoot;
+
+    void Start()
+    {
+        // Only enable XR rig for local player
+        xrRigRoot.SetActive(realtimeView.isOwnedLocally);
+    }
 
     protected override void OnRealtimeModelReplaced(PlayerModel previousModel, PlayerModel currentModel)
     {

@@ -14,19 +14,30 @@ public class LobbyController : MonoBehaviour
 
     void Start()
     {
-        // Get current match code from MatchManager
-        if (MatchManager.instance != null)
+        // Set match code label
+        matchCodeLabel.text = MatchManager.instance?.currentMatchCode ?? "???";
+
+        // Wait until the room is fully connected before spawning
+        Realtime realtime = FindObjectOfType<Realtime>();
+        if (realtime.connected)
         {
-            matchCodeLabel.text = $"{MatchManager.instance.currentMatchCode}";
+            SpawnPlayer();
         }
         else
         {
-            matchCodeLabel.text = "???";
-            Debug.LogWarning("MatchManager instance is missing!");
+            realtime.didConnectToRoom += OnConnected;
         }
+    }
 
-        // Instantiate networked Player prefab -- NOTE: Down stream event handlers will spawn rows in UI to show players in room
-        Realtime.Instantiate("Player", true);
+    void OnConnected(Realtime realtime)
+    {
+        realtime.didConnectToRoom -= OnConnected;
+        SpawnPlayer();
+    }
+
+    void SpawnPlayer()
+    {
+        Realtime.Instantiate("Player", ownedByClient: true);
     }
 
     private void OnEnable()

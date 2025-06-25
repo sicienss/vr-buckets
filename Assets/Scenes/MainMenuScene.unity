@@ -780,7 +780,7 @@ GameObject:
   - component: {fileID: 285530894}
   - component: {fileID: 285530895}
   m_Layer: 0
-  m_Name: MatchCodeScreen
+  m_Name: MatchCodeEntryScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8812,7 +8812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de8fc2ce39c9994c933cc462807f5ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enterMatchCodeScreen: {fileID: 285530893}
+  matchCodeEntryScreen: {fileID: 285530893}
   inputField: {fileID: 1782132240}
   keyboardButtons:
   - {fileID: 1703463081}

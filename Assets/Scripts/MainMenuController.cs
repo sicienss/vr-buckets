@@ -9,32 +9,40 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField] GameObject enterMatchCodeScreen;
+    [SerializeField] GameObject matchCodeEntryScreen;
     [SerializeField] TMP_Text inputField;
     [SerializeField] List<Button> keyboardButtons = new List<Button>();
 
+
     private void Awake()
     {
-        // Subscribe
+        // Subscribe to stuff
         foreach (Button button in keyboardButtons)
         {
             button.onClick.AddListener(OnKeyboardButtonClick);
+        }
+        MatchManager.instance.OnJoinSuccess += HandleJoinSuccess;
+        MatchManager.instance.OnJoinFailure += HandleJoinFailure;
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe from stuff
+        foreach (Button button in keyboardButtons)
+        {
+            button.onClick.AddListener(OnKeyboardButtonClick);
+        }
+        if (MatchManager.instance != null)
+        {
+            MatchManager.instance.OnJoinSuccess -= HandleJoinSuccess;
+            MatchManager.instance.OnJoinFailure -= HandleJoinFailure;
         }
     }
 
     private void Start()
     {
         // Initialize
-        enterMatchCodeScreen.SetActive(false);
-    }
-
-    private void OnDisable()
-    {
-        // Unsubscribe
-        foreach (Button button in keyboardButtons)
-        {
-            button.onClick.AddListener(OnKeyboardButtonClick);
-        }
+        matchCodeEntryScreen.SetActive(false);
     }
 
     public void OnSoloPlayClicked()
@@ -44,32 +52,32 @@ public class MainMenuController : MonoBehaviour
 
     public void OnCreateMatchClicked()
     {
-        // Optionally: connect to Normcore here first
-        // Realtime.Connect("my-room-code");
+        // Create Normcore room w/ random match code
+        MatchManager.instance.CreateRandomRoom();
 
-        // Load scene
-        SceneManager.LoadScene("LobbyScene");
+        // Change scenes
+        SceneManager.UnloadScene("MainMenuScene");
+        SceneManager.LoadScene("LobbyScene", LoadSceneMode.Additive);
     }
 
     public void OnJoinMatchClicked()
     {
         // Show match code entry UI
-        OpenEnterMatchCodeScreen();
+        OpenMatchCodeEntryScreen();
     }
 
 
-    void OpenEnterMatchCodeScreen()
+    void OpenMatchCodeEntryScreen()
     {
         // Initialize screen
         inputField.text = "";
-
-        enterMatchCodeScreen.SetActive(true);
+        matchCodeEntryScreen.SetActive(true);
     }
 
-    void CloseEnterMatchCodeScreen()
+    void CloseMatchCodeEntryScreen()
     {
         inputField.text = "";
-        enterMatchCodeScreen.SetActive(false);
+        matchCodeEntryScreen.SetActive(false);
     }
 
     void OnKeyboardButtonClick()
@@ -86,6 +94,7 @@ public class MainMenuController : MonoBehaviour
 
         string key = label.text;
 
+        // Delete, clear, or add letters to inputField
         if (key.Equals("DEL", StringComparison.OrdinalIgnoreCase))
         {
             if (inputField.text.Length > 0)
@@ -101,34 +110,31 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    public void GoBackFromMatchCode()
-    {
-        CloseEnterMatchCodeScreen();   
-    }
-
     public void SubmitMatchCode()
     {
-        string input = inputField.text;
-
-        // TODO: logic to check if match code corresponds to Normcore room (or whatever)
-        if (input.Equals("test", StringComparison.OrdinalIgnoreCase))
-        {
-            Debug.Log("Match code success");
-            GoToLobby();            
-        }
-        else
-        {
-            Debug.Log("Match code fail");
-            GoBackFromMatchCode();
-        }
+        // Check if submitted match code corresponds to Normcore room
+        string code = inputField.text.ToUpperInvariant();
+        MatchManager.instance.TryJoinRoom(code); // Callbacks below will fire in response to success or failure       
     }
 
-    public void GoToLobby()
+    private void HandleJoinSuccess()
     {
-        // Load scene
-        SceneManager.LoadScene("LobbyScene");
+        // Change scenes
+        SceneManager.UnloadScene("MainMenuScene");
+        SceneManager.LoadScene("LobbyScene", LoadSceneMode.Additive);
     }
 
+    private void HandleJoinFailure()
+    {
+        // TODO: flow for surfacing the error inUI rather than just going back
+        GoBackFromMatchCode();
+    }
+
+    public void GoBackFromMatchCode()
+    {
+        CloseMatchCodeEntryScreen();
+    }
+    
     public void OnSettingsClicked()
     {
         // TODO
@@ -136,7 +142,6 @@ public class MainMenuController : MonoBehaviour
 
     public void OnQuitClicked()
     {
-        // Exit the application
         Application.Quit();
     }
 }

@@ -17,6 +17,12 @@ public class LobbyController : MonoBehaviour
         // Set match code label
         matchCodeLabel.text = MatchManager.instance?.currentMatchCode ?? "???";
 
+        // Handle already-spawned players
+        foreach (var pc in FindObjectsOfType<PlayerComponent>())
+        {
+            HandlePlayerSpawned(pc);
+        }
+
         // Wait until the room is fully connected before spawning
         Realtime realtime = FindObjectOfType<Realtime>();
         if (realtime.connected)

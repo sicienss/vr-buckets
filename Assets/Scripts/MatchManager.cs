@@ -22,7 +22,6 @@ public class MatchManager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject); // Realtime and state persist across scenes
     }
 
     public void TryJoinRoom(string code)

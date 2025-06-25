@@ -11,6 +11,11 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
     // ^ TODO: Move this somewhere better
     [SerializeField] GameObject xrRigRoot;
 
+    [SerializeField] Transform leftControllerAnchor;
+    [SerializeField] Transform rightControllerAnchor;
+    [SerializeField] Transform leftHandTransform;
+    [SerializeField] Transform rightHandTransform;
+
     void Start()
     {
         // Only enable XR rig for local player
@@ -53,5 +58,17 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
         }
 
         OnPlayerDespawned?.Invoke(this);
+    }
+
+    private void Update()
+    {
+        if (!realtimeView.isOwnedLocally) return;
+
+        // Owner updates hand position to match controller position and transform is synced by Normcore using RealtimeTransform
+        leftHandTransform.position = leftControllerAnchor.position;
+        leftHandTransform.rotation = leftControllerAnchor.rotation;
+
+        rightHandTransform.position = rightControllerAnchor.position;
+        rightHandTransform.rotation = rightControllerAnchor.rotation;
     }
 }

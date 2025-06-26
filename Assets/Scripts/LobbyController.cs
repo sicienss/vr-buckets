@@ -94,13 +94,17 @@ public class LobbyController : MonoBehaviour
 
     public void OnStartMatchClicked()
     {
-        // Only host can start game
-        if (GameManager.instance.realtime.clientID == 0)
-        {
-            GameManager.instance.realtimeView.RequestOwnership();
-            GameManager.instance.Model.gameState = 1; // Model will send event on value change causing all clients to load Basketball court scene
-            Debug.Log("Host clicked on start match button");
-        }
+        GameManager.instance.realtimeView.RequestOwnership();
+        GameManager.instance.Model.gameState = 1; // Model will send event on value change causing all clients to load Basketball court scene
+        Debug.Log("Host clicked on start match button");
+
+        //// Only host can start game
+        //if (GameManager.instance.realtime.clientID == 0)
+        //{
+        //    GameManager.instance.realtimeView.RequestOwnership();
+        //    GameManager.instance.Model.gameState = 1; // Model will send event on value change causing all clients to load Basketball court scene
+        //    Debug.Log("Host clicked on start match button");
+        //}
     }
 
     public void OnBackClicked()

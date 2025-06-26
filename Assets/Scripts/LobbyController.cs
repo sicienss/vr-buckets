@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using Normal.Realtime;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
@@ -61,8 +62,14 @@ public class LobbyController : MonoBehaviour
     void HandlePlayerSpawned(PlayerComponent pc)
     {
         // Create row for player in UI
-        GameObject row = Instantiate(playerRowPrefab, playerListUI);
-        row.GetComponent<LobbyPlayerRow>().SetPlayerName(pc.Model.playerName);
+        var row = Instantiate(playerRowPrefab, playerListUI);
+
+        var voice = pc.GetComponent<RealtimeAvatarVoice>();
+        var rowScript = row.GetComponent<LobbyPlayerRow>();
+
+        rowScript.SetPlayer(pc.Model.playerName, voice);
+
+        // store ownerID and row in dict for easy reference
         playerRowsDict[pc.realtimeView.ownerID] = row;
     }
 
@@ -78,9 +85,13 @@ public class LobbyController : MonoBehaviour
 
     public void OnStartMatchClicked()
     {
-        // Change scenes
-        SceneManager.UnloadScene("LobbyScene");
-        SceneManager.LoadScene("BasketballCourtScene", LoadSceneMode.Additive);
+        // Only host can start game
+        if (GameManager.instance.realtime.clientID == 0)
+        {
+            GameManager.instance.realtimeView.RequestOwnership();
+            GameManager.instance.Model.gameState = 1; // Model will send event on value change causing all clients to load Basketball court scene
+            Debug.Log("Host clicked on start match button");
+        }
     }
 
     public void OnBackClicked()

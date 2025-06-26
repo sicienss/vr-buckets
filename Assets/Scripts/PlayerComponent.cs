@@ -7,12 +7,22 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
     public PlayerModel Model => model; // Getter to access the model from outside this class
     public static event Action<PlayerComponent> OnPlayerSpawned;
     public static event Action<PlayerComponent> OnPlayerDespawned;
-    private static readonly string[] namePool = { "BigBaller", "SkyJam", "DunkMan", "BigJoe", "AirAce", "Hoopster", "Bucketz", "FastBreak" };
+    private static readonly string[] namePool = {
+    "BigBaller", "SkyJam", "DunkMan", "BigJoe",
+    "AirAce", "Hoopster", "Bucketz", "FastBreak",
+    "AlleyKing", "JellyRoll", "PosterBoy", "SlamUnit",
+    "SpinMove", "BoardLord", "TripleDub", "IsoJoe",
+    "Rainmaker", "NoLook", "HangTime", "ThePaint",
+    "CashOut", "AndOne", "Crossover", "FullCourt",
+    "Baseline", "BouncePass", "Backboard", "ClutchCity",
+    "SwishZone", "HeatCheck", "ZoneCrusher", "InTheLab"
+};
     // ^ TODO: Move this somewhere better
     [SerializeField] GameObject xrRigRoot;
-
+    [SerializeField] Transform headAnchor;
     [SerializeField] Transform leftControllerAnchor;
     [SerializeField] Transform rightControllerAnchor;
+    [SerializeField] Transform headTransform;
     [SerializeField] Transform leftHandTransform;
     [SerializeField] Transform rightHandTransform;
 
@@ -20,30 +30,25 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
     {
         if (realtimeView.isOwnedLocally)
         {
-            // Enable XR rig for local input
+            // Enable camera and XR input for local player
             xrRigRoot.SetActive(true);
-            leftControllerAnchor.gameObject.SetActive(true);
-            rightControllerAnchor.gameObject.SetActive(true);
-
-            // Ensure hands are visible to self
-            leftHandTransform.gameObject.SetActive(true);
-            rightHandTransform.gameObject.SetActive(true);
         }
         else
         {
             // Disable camera and XR input for remote players
             xrRigRoot.SetActive(false);
-            leftControllerAnchor.gameObject.SetActive(false);
-            rightControllerAnchor.gameObject.SetActive(false);
-
-            // Ensure hands are visible to others
-            leftHandTransform.gameObject.SetActive(true);
-            rightHandTransform.gameObject.SetActive(true);
         }
+
+        // Ensure head and hands are visible
+        headAnchor.gameObject.SetActive(true);
+        leftControllerAnchor.gameObject.SetActive(true);
+        rightControllerAnchor.gameObject.SetActive(true);
+
 
         // Ensure cascading ownership of child networked objects
         if (realtimeView.isOwnedLocally)
         {
+            headTransform.GetComponent<RealtimeTransform>().RequestOwnership();
             leftHandTransform.GetComponent<RealtimeTransform>().RequestOwnership();
             rightHandTransform.GetComponent<RealtimeTransform>().RequestOwnership();
         }
@@ -80,10 +85,6 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
 
     private void OnDestroy()
     {
-        if (realtimeView.isOwnedLocally)
-        {
-        }
-
         OnPlayerDespawned?.Invoke(this);
     }
 
@@ -91,10 +92,11 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
     {
         if (!realtimeView.isOwnedLocally) return;
 
-        // Owner update hand position
+        // Owner updates head and hands, and the transform is synced on network via Normcore's RealtimeTransform
+        headTransform.position = headAnchor.position;
+        headTransform.rotation = headAnchor.rotation;
         leftHandTransform.position = leftControllerAnchor.position;
         leftHandTransform.rotation = leftControllerAnchor.rotation;
-
         rightHandTransform.position = rightControllerAnchor.position;
         rightHandTransform.rotation = rightControllerAnchor.rotation;
     }

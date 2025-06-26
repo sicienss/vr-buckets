@@ -19,20 +19,29 @@ public class LobbyController : MonoBehaviour
         matchCodeLabel.text = MatchManager.instance?.currentMatchCode ?? "???";
 
         // Handle already-spawned players
+        bool foundSelf = false;
         foreach (var pc in FindObjectsOfType<PlayerComponent>())
         {
             HandlePlayerSpawned(pc);
+
+            if (pc.realtimeView.isOwnedLocally)
+            {
+                foundSelf = true;
+            }
         }
 
-        // Wait until the room is fully connected before spawning
+        // Only spawn if not already spawned
         Realtime realtime = FindObjectOfType<Realtime>();
-        if (realtime.connected)
+        if (!foundSelf)
         {
-            SpawnPlayer();
-        }
-        else
-        {
-            realtime.didConnectToRoom += OnConnected;
+            if (realtime.connected)
+            {
+                SpawnPlayer();
+            }
+            else
+            {
+                realtime.didConnectToRoom += OnConnected;
+            }
         }
     }
 

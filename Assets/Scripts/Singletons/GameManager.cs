@@ -128,6 +128,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
             if (label != null) label.text = i.ToString();
             yield return new WaitForSeconds(1f);
         }
+        if (label != null) label.text = "0";
 
         // Host transitions state
         if (realtime.clientID == 0)
@@ -156,6 +157,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         foreach (var player in FindObjectsOfType<PlayerComponent>())
         {
             GameObject rowGameObject = Instantiate(scoreRowPrefab, GameObject.Find("ScoreRowContainer").transform);
+            rowGameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
             ScoreRow row = rowGameObject.GetComponent<ScoreRow>();
             row.Bind(player.Model, player.GetComponent<RealtimeAvatarVoice>());
         }

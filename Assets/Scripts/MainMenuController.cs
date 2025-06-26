@@ -116,14 +116,7 @@ public class MainMenuController : MonoBehaviour
 
     private void HandleJoinSuccess()
     {
-        StartCoroutine(GoToLobbyRoutine());
-    }
-
-    IEnumerator GoToLobbyRoutine()
-    {
-        // Change scenes
-        yield return SceneManager.UnloadSceneAsync("MainMenuScene");
-        yield return SceneManager.LoadSceneAsync("LobbyScene", LoadSceneMode.Additive);
+        GameManager.instance.GoToLobby();
     }
 
     private void HandleJoinFailure()

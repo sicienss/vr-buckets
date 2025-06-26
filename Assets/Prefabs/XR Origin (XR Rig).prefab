@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 952148051979037794}
   - component: {fileID: 305637439857005221}
   - component: {fileID: 6926112109481670489}
+  - component: {fileID: 3794551441686639094}
   m_Layer: 0
   m_Name: Ray Interactor
   m_TagString: Untagged
@@ -463,6 +464,21 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &3794551441686639094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281925914224869531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890914dbdd9506d428722baba579df6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 6926112109481670489}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  highlightColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &1316712602215147125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,6 +1509,7 @@ GameObject:
   - component: {fileID: 2792896006102244639}
   - component: {fileID: 5461864803269676356}
   - component: {fileID: 436732297305594958}
+  - component: {fileID: 4868291218613469789}
   m_Layer: 0
   m_Name: Ray Interactor
   m_TagString: Untagged
@@ -1945,6 +1962,21 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &4868291218613469789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555672507018617325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890914dbdd9506d428722baba579df6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 436732297305594958}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  highlightColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &6932508826898318815
 GameObject:
   m_ObjectHideFlags: 0

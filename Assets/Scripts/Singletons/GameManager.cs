@@ -91,6 +91,18 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         }
     }
 
+    public void GoToLobby()
+    {
+        StartCoroutine(GoToLobbyRoutine());
+    }
+
+    IEnumerator GoToLobbyRoutine()
+    {
+        // Change scenes
+        yield return SceneManager.UnloadSceneAsync("MainMenuScene");
+        yield return SceneManager.LoadSceneAsync("LobbyScene", LoadSceneMode.Additive);
+    }
+
     private IEnumerator CountdownRoutine()
     {
         // Create a score rows for each player
@@ -122,7 +134,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         // Do countdown
         TMP_Text label = GameObject.Find("TimerLabel")?.GetComponent<TMP_Text>();
 
-        int matchDurationSeconds = 10;
+        int matchDurationSeconds = 120;
         for (int i = matchDurationSeconds; i >= 1; i--)
         {
             if (label != null) label.text = i.ToString();
@@ -141,9 +153,9 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     {
         TMP_Text label = GameObject.Find("CountdownLabel")?.GetComponent<TMP_Text>();
         label.text = "Time's Up!";
-        yield return new WaitForSeconds(2f);
-        GameObject.Find("CountdownLabel").GetComponent<TMPro.TMP_Text>().text = $"Player X Wins";
         yield return new WaitForSeconds(3f);
+        GameObject.Find("CountdownLabel").GetComponent<TMPro.TMP_Text>().text = $"Player X Wins";
+        yield return new WaitForSeconds(5f);
 
         // Host transitions state
         if (realtime.clientID == 0)

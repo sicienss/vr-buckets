@@ -13,21 +13,14 @@ public class BallPhysicsControl : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         grab = GetComponent<XRGrabInteractable>();
 
+        grab.movementType = XRBaseInteractable.MovementType.VelocityTracking;
+
         grab.selectEntered.AddListener(OnGrabbed);
         grab.selectExited.AddListener(OnReleased);
     }
 
-    private void OnDestroy()
-    {
-        grab.selectEntered.RemoveListener(OnGrabbed);
-        grab.selectExited.RemoveListener(OnReleased);
-    }
-
     private void OnGrabbed(SelectEnterEventArgs args)
     {
-        rb.isKinematic = true;
-        rb.useGravity = false;
-
         // Remember owner
         Basketball basketball = GetComponent<Basketball>();
         basketball.owner = args.interactorObject.transform.GetComponentInParent<PlayerComponent>();

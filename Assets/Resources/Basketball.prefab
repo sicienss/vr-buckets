@@ -238,6 +238,8 @@ MonoBehaviour:
   originalPosition: {x: 0, y: 0, z: 0}
   respawnDistance: 8
   maxTimeBeforeRespawn: 10
+  hasScored: 0
+  shotDistance: 0
 --- !u!114 &85000326655398886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8880,7 +8882,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: 574e0b718f26bf84abc75c61c44541e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

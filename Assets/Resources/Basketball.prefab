@@ -235,6 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
+  originalPosition: {x: 0, y: 0, z: 0}
   respawnDistance: 8
   maxTimeBeforeRespawn: 10
 --- !u!114 &85000326655398886
@@ -277,7 +278,7 @@ MonoBehaviour:
   _syncRotation: 1
   _syncScale: 1
   _syncVelocity: 1
-  _maintainOwnershipWhileSleeping: 0
+  _maintainOwnershipWhileSleeping: 1
 --- !u!1 &7687701164762050564
 GameObject:
   m_ObjectHideFlags: 0

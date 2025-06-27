@@ -26,6 +26,7 @@ public class Basketball : MonoBehaviour
     private float timeSinceRelease;
     private bool isHeld = false;
     public bool hasScored = false; // bool for tracking whether ball scored, used for (1) preventing multiple scoring when bounding around rim, (2) blocking streak reset on collision w/ ground
+    public bool enteredTop = false; // bool for tracking whether ball went through top trigger, uses for (1) preventing false positive scores, (2) disabling HoopAssistZone
     public float shotDistance; // distance the ball was shot from, used to determine score
 
     // AUDIO -- TODO: move this to an audio manager 
@@ -207,38 +208,12 @@ public class Basketball : MonoBehaviour
         timeSinceRelease = 0f;
     }
 
-    private bool enteredTop = false;
-
-    private void OnTriggerEnter(Collider other)
+    public void ResetTopAfterDelay()
     {
-        if (other.CompareTag("Ball"))
-        {
-            if (gameObject.name == "HoopTopTrigger")
-            {
-                enteredTop = true;
-                StartCoroutine(ResetTopAfterDelay());
-            }
-            else if (gameObject.name == "HoopBottomTrigger" && enteredTop)
-            {
-                enteredTop = false;
-
-                float threePointThreshold = 4; // distance in meters for 3-pointers // TODO: Don't hardcode this here
-                int scoreToAward = shotDistance > threePointThreshold ? 3 : 2;
-                owner.Model.playerScore += scoreToAward;
-                owner.Model.playerShotStreak += 1;
-
-                // Spawn effect -- NOTE: this is local to client who made shot
-                Vector3 spawnPosition = transform.position + Vector3.up * 0.25f; // just above the hoop
-                GameObject scoreText = Instantiate(GameManager.instance.floatingScoreTextPrefab, spawnPosition, Quaternion.identity);
-                var tmp = scoreText.GetComponentInChildren<TMPro.TMP_Text>();
-                if (tmp != null) tmp.text = $"+{scoreToAward}";
-
-                PlaySwish(); // SFX
-            }
-        }
+        StartCoroutine(ResetTopAfterDelayRoutine());
     }
 
-    private IEnumerator ResetTopAfterDelay()
+    IEnumerator ResetTopAfterDelayRoutine()
     {
         yield return new WaitForSeconds(1.0f);
         enteredTop = false;

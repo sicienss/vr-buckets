@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class HoopAssistZone : MonoBehaviour
 {
-    public float pullStrength = 5f;
+    float pullStrength = 7.5f;
     public Transform targetPoint;
 
     private void OnTriggerStay(Collider other)
     {
         Rigidbody rb = other.attachedRigidbody;
         Basketball basketball = rb.GetComponent<Basketball>();
-        if (rb != null && basketball != null && !basketball.hasScored)
+        if (rb != null && basketball != null && !basketball.enteredTop)
         {
             Vector3 direction = (targetPoint.position - other.transform.position).normalized;
             float distance = Vector3.Distance(targetPoint.position, other.transform.position);

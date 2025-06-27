@@ -8,6 +8,7 @@ public class ScoreRow : MonoBehaviour
     [SerializeField] private Image background;
     [SerializeField] private TMP_Text playerNameLabel;
     [SerializeField] private TMP_Text playerScoreLabel;
+    [SerializeField] private TMP_Text playerShotStreakLabel;
 
     private PlayerModel playerModel;
 
@@ -23,6 +24,7 @@ public class ScoreRow : MonoBehaviour
         playerScoreLabel.text = model.playerScore.ToString();
 
         model.playerScoreDidChange += OnPlayerScoreChanged;
+        model.playerShotStreakDidChange += OnPlayerShotStreakChanged;
     }
 
     private void OnDestroy()
@@ -30,12 +32,18 @@ public class ScoreRow : MonoBehaviour
         if (playerModel != null)
         {
             playerModel.playerScoreDidChange -= OnPlayerScoreChanged;
+            playerModel.playerShotStreakDidChange -= OnPlayerShotStreakChanged;
         }
     }
 
-    private void OnPlayerScoreChanged(PlayerModel model, int score)
+    private void OnPlayerScoreChanged(PlayerModel model, int value)
     {
-        playerScoreLabel.text = score.ToString();
+        playerScoreLabel.text = value.ToString();
+    }
+
+    private void OnPlayerShotStreakChanged(PlayerModel model, int value)
+    {
+        playerShotStreakLabel.text = value.ToString();
     }
 
 

@@ -14,6 +14,8 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     public GameManagerModel Model => model; // Getter to access the model from outside this class
 
     [SerializeField] GameObject scoreRowPrefab;
+    [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject basketballPrefab;
 
 
     private void Awake()
@@ -84,10 +86,25 @@ public class GameManager : RealtimeComponent<GameManagerModel>
             // so host can wait for everyone to load before advancing state
             if (realtime.clientID == 0)
             {
+                SpawnBalls(); // Only host spawns balls to avoid duplicates
                 model.gameState = 2;
             }
 
             SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+    }
+
+    private void SpawnBalls()
+    {
+        foreach (BasketballSpawnPoint spawnPoint in FindObjectsOfType<BasketballSpawnPoint>()) // TODO: Do something more performant than FindObjectsOfType()
+        {
+            Realtime.Instantiate("Basketball",
+                position: spawnPoint.transform.position,
+                rotation: spawnPoint.transform.rotation,
+                ownedByClient: false,        // Let whoever grabs it request ownership
+                preventOwnershipTakeover: false,
+                useInstance: realtime        // Attach to current Realtime room
+            );
         }
     }
 
@@ -134,7 +151,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         // Do countdown
         TMP_Text label = GameObject.Find("TimerLabel")?.GetComponent<TMP_Text>();
 
-        int matchDurationSeconds = 30; // TODO: don't hardcode this here
+        int matchDurationSeconds = 60; // TODO: don't hardcode this here
         for (int i = matchDurationSeconds; i >= 1; i--)
         {
             if (label != null) label.text = i.ToString();

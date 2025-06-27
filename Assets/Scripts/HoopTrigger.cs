@@ -13,6 +13,7 @@ public class HoopTrigger : MonoBehaviour
             if (basketball.owner.realtimeView.isOwnedLocally)
             {
                 model.playerScore += 1;
+                model.playerShotStreak += 1;
             }
         }
     }

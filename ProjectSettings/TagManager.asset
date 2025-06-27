@@ -9,8 +9,6 @@ TagManager:
   - Ground
   - Rim
   - Backboard
-  - HoopTriggerTop
-  - HoopTriggerBottom
   layers:
   - Default
   - TransparentFX

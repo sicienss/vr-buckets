@@ -42,6 +42,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         if (newState == 0)
         {
             Debug.Log("GameState changed to: Lobby");
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
             SceneManager.UnloadSceneAsync("BasketballCourtScene");
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.LoadScene("LobbyScene", LoadSceneMode.Additive);
@@ -50,6 +51,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         else if (newState == 1)
         {
             Debug.Log("GameState changed to: Loading");
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
             SceneManager.UnloadSceneAsync("LobbyScene");
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.LoadScene("BasketballCourtScene", LoadSceneMode.Additive);
@@ -89,10 +91,29 @@ public class GameManager : RealtimeComponent<GameManagerModel>
                 SpawnBalls(); // Only host spawns balls to avoid duplicates
                 model.gameState = 2;
             }
-
-            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        if (scene.name == "Lobby")
+        {
+        }
+        else if (scene.name == "BasketballCourtScene")
+        {
+            // Destroy non-player networked game objects
+            foreach (var ball in FindObjectsOfType<Basketball>()) // TODO: Do this more performantly than using FindObjectsOfType()
+            {
+                Realtime.Destroy(ball.gameObject);
+            }
+        }
+
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
+
 
     private void SpawnBalls()
     {
@@ -171,7 +192,12 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         TMP_Text label = GameObject.Find("CountdownLabel")?.GetComponent<TMP_Text>();
         label.text = "Time's Up!";
         yield return new WaitForSeconds(3f);
-        GameObject.Find("CountdownLabel").GetComponent<TMPro.TMP_Text>().text = $"Player X Wins";
+        // Determine winning player
+        PlayerComponent winnerPlayerComponent = FindObjectsOfType<PlayerComponent>()
+            .Where(pc => pc.Model != null)
+            .OrderByDescending(pc => pc.Model.playerScore)
+            .FirstOrDefault();
+        GameObject.Find("CountdownLabel").GetComponent<TMPro.TMP_Text>().text = $"{winnerPlayerComponent.Model.playerName} Wins";
         yield return new WaitForSeconds(5f);
 
         // Host transitions state

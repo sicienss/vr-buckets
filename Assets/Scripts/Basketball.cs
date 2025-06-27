@@ -2,9 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -24,6 +22,9 @@ public class Basketball : MonoBehaviour
 
     private float timeSinceRelease;
     private bool isHeld = false;
+    public bool hasScored = false; // bool for tracking whether ball scored, used for (1) preventing multiple scoring when bounding around rim, (2) blocking streak reset on collision w/ ground
+    public float shotDistance; // distance the ball was shot from, used to determine score
+
 
     private void Awake()
     {
@@ -58,6 +59,8 @@ public class Basketball : MonoBehaviour
 
     private void OnGrab(SelectEnterEventArgs args)
     {
+        hasScored = false; // reset
+
         // Remember owner
         owner = args.interactorObject.transform.GetComponentInParent<PlayerComponent>();
 
@@ -125,6 +128,7 @@ public class Basketball : MonoBehaviour
         float baseTime = 0.35f; // minimum duration for close throws
         float timePerMeter = 0.15f;
         float timeToTarget = baseTime + horizontalDistance * timePerMeter;
+        shotDistance = horizontalDistance;
 
         // Solve for initial velocity needed to reach target under gravity
         float verticalDist = toTarget.y;
@@ -134,10 +138,24 @@ public class Basketball : MonoBehaviour
 
         Vector3 throwDirection = horizontal.normalized * vx + Vector3.up * vy;
 
-        // Combine: 70% from calculated arc, 30% from original intent
-        Vector3 original = rb.linearVelocity;
-        Vector3 finalVelocity = Vector3.Lerp(original, throwDirection, 0.7f);
+        // Help the player more the farther they are away
+        float minDistance = 1.5f;
+        float maxDistance = 6f;
 
+        float t = Mathf.InverseLerp(minDistance, maxDistance, horizontalDistance);
+        float correctionFactor = Mathf.Lerp(0.3f, 0.9f, t); // from 30% help to 90%
+
+        // Optional: boost time for longer arc
+        float timeBoost = Mathf.Lerp(1f, 1.3f, t);
+        timeToTarget *= timeBoost;
+
+        // Recalculate velocities with new timeToTarget
+        vx = horizontalDistance / timeToTarget;
+        vy = (verticalDist + 0.5f * gravity * timeToTarget * timeToTarget) / timeToTarget;
+        throwDirection = horizontal.normalized * vx + Vector3.up * vy;
+
+        Vector3 original = rb.linearVelocity;
+        Vector3 finalVelocity = Vector3.Lerp(original, throwDirection, correctionFactor);
         rb.linearVelocity = finalVelocity;
     }
 
@@ -151,12 +169,10 @@ public class Basketball : MonoBehaviour
         float distance = Vector3.Distance(transform.position, originalPosition);
         if (distance > respawnDistance)
         {
-            Debug.Log("Respawn because distance from original position too great");
             Respawn();
         }
         else if (timeSinceRelease > maxTimeBeforeRespawn)
         {
-            Debug.Log("Respawn because time since release is too large");
             Respawn();
         }
     }
@@ -181,7 +197,7 @@ public class Basketball : MonoBehaviour
         // Reset shot streak
         if (collision.gameObject.CompareTag("Ground"))
         {
-            if (owner != null)
+            if (owner != null && !hasScored)
             {
                 var playerComponent = owner.GetComponent<PlayerComponent>();
 

@@ -114,7 +114,7 @@ public class Basketball : MonoBehaviour
         float angleToHoop = Vector3.Angle(originalDir, hoopDir);
         if (angleToHoop > 45f)
         {
-            yield break; // Too far off — don't assist
+            yield break; // Aim is too far off — don't assist
         }
 
         // Physics constants
@@ -130,24 +130,21 @@ public class Basketball : MonoBehaviour
         float timeToTarget = baseTime + horizontalDistance * timePerMeter;
         shotDistance = horizontalDistance;
 
-        // Solve for initial velocity needed to reach target under gravity
+        // Determine parameter t to help the player more the farther they are away
+        float minDistance = 1.5f;
+        float maxDistance = 6f;
+        float t = Mathf.InverseLerp(minDistance, maxDistance, horizontalDistance);
+        float correctionFactor = Mathf.Lerp(0.5f, 0.9f, t); // from 50% help to 90% depending on distance
+
+        // Solve for initial velocity needed to reach target under gravity, assuming some clearance height
         float verticalDist = toTarget.y;
 
         float vx = horizontalDistance / timeToTarget;
-        float vy = (verticalDist + 0.5f * gravity * timeToTarget * timeToTarget) / timeToTarget;
+        float arcClearance = Mathf.Lerp(0.5f, 1.25f, t); // how high the ball should peak above the hoop; lower arc for close shots, higher for far ones
+        float adjustedVerticalDist = verticalDist + arcClearance;
+        float vy = (adjustedVerticalDist + 0.5f * gravity * timeToTarget * timeToTarget) / timeToTarget;
 
         Vector3 throwDirection = horizontal.normalized * vx + Vector3.up * vy;
-
-        // Help the player more the farther they are away
-        float minDistance = 1.5f;
-        float maxDistance = 6f;
-
-        float t = Mathf.InverseLerp(minDistance, maxDistance, horizontalDistance);
-        float correctionFactor = Mathf.Lerp(0.3f, 0.9f, t); // from 30% help to 90%
-
-        // Optional: boost time for longer arc
-        float timeBoost = Mathf.Lerp(1f, 1.3f, t);
-        timeToTarget *= timeBoost;
 
         // Recalculate velocities with new timeToTarget
         vx = horizontalDistance / timeToTarget;

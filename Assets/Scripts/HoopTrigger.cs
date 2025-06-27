@@ -8,12 +8,12 @@ public class HoopTrigger : MonoBehaviour
         Basketball basketball = other.GetComponent<Basketball>();
         if (basketball != null )
         {
-            if (gameObject.name == "HoopTopTrigger")
+            if (gameObject.name == "HoopTriggerTop")
             {
                 basketball.enteredTop = true;
                 basketball.ResetTopAfterDelay();
             }
-            else if (gameObject.name == "HoopBottomTrigger" && basketball.enteredTop)
+            else if (gameObject.name == "HoopTriggerBottom" && basketball.enteredTop)
             {
                 float threePointThreshold = 4; // distance in meters for 3-pointers // TODO: Don't hardcode this here
                 int scoreToAward = basketball.shotDistance > threePointThreshold ? 3 : 2;

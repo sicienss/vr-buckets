@@ -45,11 +45,6 @@ public class MainMenuController : MonoBehaviour
         matchCodeEntryScreen.SetActive(false);
     }
 
-    public void OnSoloPlayClicked()
-    {
-        // TODO
-    }
-
     public void OnCreateMatchClicked()
     {
         // Create Normcore room w/ random match code

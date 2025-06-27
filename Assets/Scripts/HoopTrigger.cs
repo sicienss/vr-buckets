@@ -19,6 +19,7 @@ public class HoopTrigger : MonoBehaviour
                 int scoreToAward = basketball.shotDistance > threePointThreshold ? 3 : 2;
                 basketball.owner.Model.playerScore += scoreToAward;
                 basketball.owner.Model.playerShotStreak += 1;
+                basketball.hasScored = true;
 
                 // Spawn effect -- NOTE: this is local to client who made shot
                 Vector3 spawnPosition = transform.position + Vector3.up * 0.25f; // just above the hoop

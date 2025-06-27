@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HoopAssistZone : MonoBehaviour
 {
-    float pullStrength = 7.5f;
+    float pullStrength = 2.5f;
     public Transform targetPoint;
 
     private void OnTriggerStay(Collider other)

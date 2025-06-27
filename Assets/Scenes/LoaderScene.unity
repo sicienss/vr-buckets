@@ -287,7 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreRowPrefab: {fileID: 8147113902661002939, guid: ebc0a0e55feb4294ea2d0c3fd7476466, type: 3}
-  floatingScoreTextPrefab: {fileID: 0}
+  floatingScoreTextPrefab: {fileID: 7203921694038255145, guid: f6171639fa7e60648af90970c4f4dd76, type: 3}
   audioSource: {fileID: 1302277430}
   whistle: {fileID: 8300000, guid: 8ae846f3d4570c84e8e8f1f6753040a4, type: 3}
   buzzer: {fileID: 8300000, guid: 9ce621bf39fd8b9478bd3d9e767f3c50, type: 3}

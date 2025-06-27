@@ -116,9 +116,7 @@ public class MainMenuController : MonoBehaviour
 
     private void HandleJoinSuccess()
     {
-        // Change scenes
-        SceneManager.UnloadScene("MainMenuScene");
-        SceneManager.LoadScene("LobbyScene", LoadSceneMode.Additive);
+        GameManager.instance.GoToLobby();
     }
 
     private void HandleJoinFailure()

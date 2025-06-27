@@ -2,7 +2,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Rendering;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -24,6 +27,18 @@ public class Basketball : MonoBehaviour
     private bool isHeld = false;
     public bool hasScored = false; // bool for tracking whether ball scored, used for (1) preventing multiple scoring when bounding around rim, (2) blocking streak reset on collision w/ ground
     public float shotDistance; // distance the ball was shot from, used to determine score
+
+    // AUDIO -- TODO: move this to an audio manager 
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip ball_bounce_soft;
+    [SerializeField] AudioClip ball_bounce_hard;
+    [SerializeField] AudioClip rim_clang;
+    [SerializeField] AudioClip rim_ding;
+    [SerializeField] AudioClip backboard_thud;
+    [SerializeField] AudioClip net_swish;
+    [SerializeField] AudioClip grab_whoosh;
+    [SerializeField] AudioClip hand_snap;
+    float volume = 1f;
 
 
     private void Awake()
@@ -73,6 +88,9 @@ public class Basketball : MonoBehaviour
 
         rb.isKinematic = true;
         rb.useGravity = false;
+
+        // SFX
+        PlayGrab();
     }
 
     private void OnRelease(SelectExitEventArgs args)
@@ -140,7 +158,7 @@ public class Basketball : MonoBehaviour
         float verticalDist = toTarget.y;
 
         float vx = horizontalDistance / timeToTarget;
-        float arcClearance = Mathf.Lerp(0.5f, 1.25f, t); // how high the ball should peak above the hoop; lower arc for close shots, higher for far ones
+        float arcClearance = Mathf.Lerp(0.5f, 1.5f, t); // how high the ball should peak above the hoop; lower arc for close shots, higher for far ones
         float adjustedVerticalDist = verticalDist + arcClearance;
         float vy = (adjustedVerticalDist + 0.5f * gravity * timeToTarget * timeToTarget) / timeToTarget;
 
@@ -204,6 +222,55 @@ public class Basketball : MonoBehaviour
                     playerComponent.Model.playerShotStreak = 0;
                 }
             }
+
+            // SFX
+            float impact = collision.relativeVelocity.magnitude;
+
+            if (collision.gameObject.CompareTag("Ground"))
+                PlayBounceSound(impact);
+            else if (collision.gameObject.CompareTag("Rim"))
+                PlayRimHitSound(impact);
+            else if (collision.gameObject.CompareTag("Backboard"))
+                PlayBackboardHitSound();
         }
+    }
+
+    public  void PlayBounceSound(float impact)
+    {
+        if (impact > 1f)
+        {
+            audioSource.PlayOneShot(ball_bounce_hard, volume);
+        }
+        else
+        {
+            audioSource.PlayOneShot(ball_bounce_soft, volume);
+        }
+    }
+
+    public void PlayRimHitSound(float impact)
+    {
+        if (impact > 1f)
+        {
+            audioSource.PlayOneShot(rim_ding, volume);
+        }
+        else
+        {
+            audioSource.PlayOneShot(rim_clang, volume);
+        }
+    }
+
+    public void PlayBackboardHitSound()
+    {
+        audioSource.PlayOneShot(backboard_thud, volume);
+    }
+
+    public void PlaySwish()
+    {
+        audioSource.PlayOneShot(net_swish, volume);
+    }
+
+    public void PlayGrab()
+    {
+        audioSource.PlayOneShot(grab_whoosh, volume);
     }
 }

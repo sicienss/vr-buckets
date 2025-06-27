@@ -8,7 +8,8 @@ public class HoopAssistZone : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         Rigidbody rb = other.attachedRigidbody;
-        if (rb != null && other.CompareTag("Basketball"))
+        Basketball basketball = rb.GetComponent<Basketball>();
+        if (rb != null && basketball != null && !basketball.hasScored)
         {
             Vector3 direction = (targetPoint.position - other.transform.position).normalized;
             float distance = Vector3.Distance(targetPoint.position, other.transform.position);

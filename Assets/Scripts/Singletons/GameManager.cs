@@ -14,8 +14,11 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     public GameManagerModel Model => model; // Getter to access the model from outside this class
 
     [SerializeField] GameObject scoreRowPrefab;
-    [SerializeField] GameObject playerPrefab;
-    [SerializeField] GameObject basketballPrefab;
+
+    // AUDIO -- TODO: move this to audio manager
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip whistle;
+    [SerializeField] AudioClip buzzer;
 
 
     private void Awake()
@@ -157,6 +160,8 @@ public class GameManager : RealtimeComponent<GameManagerModel>
 
         if (label != null) label.text = "Go!";
 
+        PlayWhistle(); // SFX
+
         // Host transitions state
         if (realtime.clientID == 0)
         {
@@ -189,6 +194,8 @@ public class GameManager : RealtimeComponent<GameManagerModel>
 
     IEnumerator ResultsRoutine()
     {
+        PlayBuzzer(); // SFX
+
         TMP_Text label = GameObject.Find("CountdownLabel")?.GetComponent<TMP_Text>();
         label.text = "Time's Up!";
         yield return new WaitForSeconds(3f);
@@ -234,4 +241,14 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     //            break;
     //    }
     //}
+
+    public void PlayWhistle()
+    {
+        audioSource.PlayOneShot(whistle, 1f);
+    }
+
+    public void PlayBuzzer()
+    {
+        audioSource.PlayOneShot(buzzer, 1f);
+    }
 }

@@ -25,6 +25,8 @@ public class HoopTrigger : MonoBehaviour
                 GameObject scoreText = Instantiate(floatingScoreTextPrefab, spawnPosition, Quaternion.identity);
                 var tmp = scoreText.GetComponentInChildren<TMPro.TMP_Text>();
                 if (tmp != null) tmp.text = $"+{scoreToAward}";
+
+                basketball.PlaySwish(); // SFX
             }
         }
     }

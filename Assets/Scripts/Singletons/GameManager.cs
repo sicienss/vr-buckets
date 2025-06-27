@@ -13,7 +13,8 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     public static GameManager instance;
     public GameManagerModel Model => model; // Getter to access the model from outside this class
 
-    [SerializeField] GameObject scoreRowPrefab;
+    public GameObject scoreRowPrefab;
+    public GameObject floatingScoreTextPrefab;
 
     // AUDIO -- TODO: move this to audio manager
     [SerializeField] AudioSource audioSource;

@@ -207,6 +207,43 @@ public class Basketball : MonoBehaviour
         timeSinceRelease = 0f;
     }
 
+    private bool enteredTop = false;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ball"))
+        {
+            if (gameObject.name == "HoopTopTrigger")
+            {
+                enteredTop = true;
+                StartCoroutine(ResetTopAfterDelay());
+            }
+            else if (gameObject.name == "HoopBottomTrigger" && enteredTop)
+            {
+                enteredTop = false;
+
+                float threePointThreshold = 4; // distance in meters for 3-pointers // TODO: Don't hardcode this here
+                int scoreToAward = shotDistance > threePointThreshold ? 3 : 2;
+                owner.Model.playerScore += scoreToAward;
+                owner.Model.playerShotStreak += 1;
+
+                // Spawn effect -- NOTE: this is local to client who made shot
+                Vector3 spawnPosition = transform.position + Vector3.up * 0.25f; // just above the hoop
+                GameObject scoreText = Instantiate(GameManager.instance.floatingScoreTextPrefab, spawnPosition, Quaternion.identity);
+                var tmp = scoreText.GetComponentInChildren<TMPro.TMP_Text>();
+                if (tmp != null) tmp.text = $"+{scoreToAward}";
+
+                PlaySwish(); // SFX
+            }
+        }
+    }
+
+    private IEnumerator ResetTopAfterDelay()
+    {
+        yield return new WaitForSeconds(1.0f);
+        enteredTop = false;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         // Reset shot streak
@@ -222,17 +259,17 @@ public class Basketball : MonoBehaviour
                     playerComponent.Model.playerShotStreak = 0;
                 }
             }
-
-            // SFX
-            float impact = collision.relativeVelocity.magnitude;
-
-            if (collision.gameObject.CompareTag("Ground"))
-                PlayBounceSound(impact);
-            else if (collision.gameObject.CompareTag("Rim"))
-                PlayRimHitSound(impact);
-            else if (collision.gameObject.CompareTag("Backboard"))
-                PlayBackboardHitSound();
         }
+
+        // SFX
+        float impact = collision.relativeVelocity.magnitude;
+
+        if (collision.gameObject.CompareTag("Ground"))
+            PlayBounceSound(impact);
+        else if (collision.gameObject.CompareTag("Rim"))
+            PlayRimHitSound(impact);
+        else if (collision.gameObject.CompareTag("Backboard"))
+            PlayBackboardHitSound();
     }
 
     public  void PlayBounceSound(float impact)

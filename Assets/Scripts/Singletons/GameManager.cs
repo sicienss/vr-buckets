@@ -97,15 +97,26 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         }
         else if (scene.name == "BasketballCourtScene")
         {
+            //// Go to an open spawn point -- TODO: This is a bad algo, do something better...
+            //var players = FindObjectsOfType<PlayerComponent>();
+            //var playerSpawnPoints = FindObjectsOfType<PlayerSpawnPoint>();
+            //foreach (var playerSpawnPoint in playerSpawnPoints)
+            //{
+            //    if (!players.Any(p => Vector3.Distance(p.transform.position, playerSpawnPoint.transform.position) < 1))
+            //    { 
+            //        transform.position = playerSpawnPoint.transform.position;
+            //        break;
+            //    }
+            //}
+
             // Fade in
             TransitionManager.instance.Fade(0f, 0.5f);
 
             // Host transitions state
-            // TODO: We should add _isReady to PlayerModel and set to true only when scenes have loaded,
-            // so host can wait for everyone to load before advancing state
+            // TODO: We should add _isReady to PlayerModel and set to true only when scenes have loaded, so host can wait for everyone to load before advancing state
             if (realtime.clientID == 0)
             {
-                SpawnBalls(); // Only host spawns balls to avoid duplicates
+                SpawnBalls(); // Host spawns balls
                 model.gameState = 2;
             }
         }
@@ -120,17 +131,15 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         }
         else if (scene.name == "BasketballCourtScene")
         {
-            // Destroy non-player networked game objects
-            foreach (var ball in FindObjectsOfType<Basketball>()) // TODO: Do this more performantly than using FindObjectsOfType()
+            // Host destroys balls
+            if (realtime.clientID == 0)
             {
-                Realtime.Destroy(ball.gameObject);
+                DestroyBalls();
             }
         }
 
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
-
-
 
     private void SpawnBalls()
     {
@@ -143,6 +152,14 @@ public class GameManager : RealtimeComponent<GameManagerModel>
                 preventOwnershipTakeover: false,
                 useInstance: realtime        // Attach to current Realtime room
             );
+        }
+    }
+
+    private void DestroyBalls()
+    {
+        foreach (var ball in FindObjectsOfType<Basketball>()) // TODO: Do this more performantly than using FindObjectsOfType()
+        {
+            Realtime.Destroy(ball.gameObject);
         }
     }
 
@@ -247,23 +264,6 @@ public class GameManager : RealtimeComponent<GameManagerModel>
             row.Bind(player.Model, player.GetComponent<RealtimeAvatarVoice>());
         }
     }
-
-    //private void Update()
-    //{
-    //    switch (model.gameState)
-    //    {
-    //        case 0:
-    //            break;
-    //        case 1:
-    //            break;
-    //        case 2:
-    //            break;
-    //        case 3:
-    //            break;
-    //        case 4:
-    //            break;
-    //    }
-    //}
 
     public void PlayWhistle()
     {

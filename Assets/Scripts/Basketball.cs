@@ -24,7 +24,7 @@ public class Basketball : MonoBehaviour
     [SerializeField] private float maxTimeBeforeRespawn = 7.5f;
 
     private float timeSinceRelease;
-    private bool isHeld = false;
+    public bool isHeld = false;
     public bool hasScored = false; // bool for tracking whether ball scored, used for (1) preventing multiple scoring when bounding around rim, (2) blocking streak reset on collision w/ ground
     public bool enteredTop = false; // bool for tracking whether ball went through top trigger, uses for (1) preventing false positive scores, (2) disabling HoopAssistZone
     public float shotDistance; // distance the ball was shot from, used to determine score

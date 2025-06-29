@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Normal.Realtime;
+using System.Linq;
 
 public class PlayerComponent : RealtimeComponent<PlayerModel>
 {
@@ -104,5 +105,16 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
         leftHandTransform.rotation = leftControllerAnchor.rotation;
         rightHandTransform.position = rightControllerAnchor.position;
         rightHandTransform.rotation = rightControllerAnchor.rotation;
+
+        // DEBUG -- Input handling
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            // Teleport ball above hoop
+            Basketball basketball = FindObjectsOfType<Basketball>().First(b => !b.isHeld && b.GetComponent<Rigidbody>().linearVelocity.y == 0);
+            basketball.owner = this;
+            basketball.GetComponent<RealtimeView>()?.RequestOwnership(); // local client is requesting to take ownership of the networked object that this RealtimeView is attached to
+            basketball.GetComponent<RealtimeTransform>()?.RequestOwnership(); // also need to request ownership of the transform for pos and rot to update
+            basketball.transform.position = GameObject.Find("HoopAimPoint").transform.position + Vector3.up * 0.5f;
+        }
     }
 }

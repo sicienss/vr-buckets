@@ -109,12 +109,23 @@ public class LobbyController : MonoBehaviour
 
     public void OnBackClicked()
     {
+        StartCoroutine(BackRoutine());
+    }
+
+    IEnumerator BackRoutine()
+    {
+        // Fade out
+        yield return TransitionManager.instance.Fade(1f, 0.5f);
+
         // Disconnect from Normcore room
         MatchManager.instance.Disconnect();
 
         // Change scenes
         SceneManager.UnloadScene("LobbyScene");
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Additive);
+
+        // Fade in
+        yield return TransitionManager.instance.Fade(0f, 0.5f);
     }
 }
 

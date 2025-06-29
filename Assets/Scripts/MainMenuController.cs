@@ -25,6 +25,13 @@ public class MainMenuController : MonoBehaviour
         MatchManager.instance.OnJoinFailure += HandleJoinFailure;
     }
 
+    private void Start()
+    {
+        // FADE IN
+        TransitionManager.instance.Fade(0f, 0.5f);
+        Debug.Log("Fade!");
+    }
+
     private void OnDestroy()
     {
         // Unsubscribe from stuff
@@ -37,12 +44,6 @@ public class MainMenuController : MonoBehaviour
             MatchManager.instance.OnJoinSuccess -= HandleJoinSuccess;
             MatchManager.instance.OnJoinFailure -= HandleJoinFailure;
         }
-    }
-
-    private void Start()
-    {
-        // Initialize
-        matchCodeEntryScreen.SetActive(false);
     }
 
     public void OnCreateMatchClicked()

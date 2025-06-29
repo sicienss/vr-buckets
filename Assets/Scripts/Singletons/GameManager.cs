@@ -54,11 +54,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         // LOADING
         else if (newState == 1)
         {
-            Debug.Log("GameState changed to: Loading");
-            SceneManager.sceneUnloaded += OnSceneUnloaded;
-            SceneManager.UnloadSceneAsync("LobbyScene");
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene("BasketballCourtScene", LoadSceneMode.Additive);
+            StartCoroutine(GoToGameplayRoutine());
         }
         // COUNTDOWN
         else if (newState == 2)
@@ -80,13 +76,30 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         }
     }
 
+    IEnumerator GoToGameplayRoutine()
+    {
+        // Fade out
+        yield return TransitionManager.instance.Fade(1f, 0.5f);
+
+        Debug.Log("GameState changed to: Loading");
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+        SceneManager.UnloadSceneAsync("LobbyScene");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.LoadScene("BasketballCourtScene", LoadSceneMode.Additive);
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "Lobby")
         {
+            // Fade in
+            TransitionManager.instance.Fade(0f, 0.5f);
         }
         else if (scene.name == "BasketballCourtScene")
         {
+            // Fade in
+            TransitionManager.instance.Fade(0f, 0.5f);
+
             // Host transitions state
             // TODO: We should add _isReady to PlayerModel and set to true only when scenes have loaded,
             // so host can wait for everyone to load before advancing state
@@ -140,9 +153,15 @@ public class GameManager : RealtimeComponent<GameManagerModel>
 
     IEnumerator GoToLobbyRoutine()
     {
+        // Fade out
+        yield return TransitionManager.instance.Fade(1f, 0.5f);
+
         // Change scenes
         yield return SceneManager.UnloadSceneAsync("MainMenuScene");
         yield return SceneManager.LoadSceneAsync("LobbyScene", LoadSceneMode.Additive);
+
+        // Fade in
+        yield return TransitionManager.instance.Fade(0f, 0.5f);
     }
 
     private IEnumerator CountdownRoutine()
@@ -207,6 +226,9 @@ public class GameManager : RealtimeComponent<GameManagerModel>
             .FirstOrDefault();
         GameObject.Find("CountdownLabel").GetComponent<TMPro.TMP_Text>().text = $"{winnerPlayerComponent.Model.playerName} Wins";
         yield return new WaitForSeconds(5f);
+
+        // Fade out
+        yield return TransitionManager.instance.Fade(1f, 0.5f);
 
         // Host transitions state
         if (realtime.clientID == 0)

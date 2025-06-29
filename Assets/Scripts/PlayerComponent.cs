@@ -1,6 +1,8 @@
-using Normal.Realtime;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Normal.Realtime;
 
 public class PlayerComponent : RealtimeComponent<PlayerModel>
 {
@@ -28,30 +30,33 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
 
     void Start()
     {
+        // Defer activation until ownership is known
+        StartCoroutine(WaitForOwnershipThenSetup());
+    }
+
+    private IEnumerator WaitForOwnershipThenSetup()
+    {
+        // Wait until the RealtimeView is owned locally or definitely not
+        while (!realtimeView.isOwnedLocally && !realtimeView.isOwnedRemotely)
+            yield return null;
+
         if (realtimeView.isOwnedLocally)
         {
-            // Enable camera and XR input for local player
             xrRigRoot.SetActive(true);
+
+            headTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
+            leftHandTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
+            rightHandTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
         }
         else
         {
-            // Disable camera and XR input for remote players
             xrRigRoot.SetActive(false);
         }
 
-        // Ensure head and hands are visible
+        // Anchors should still be visible for all players
         headAnchor.gameObject.SetActive(true);
         leftControllerAnchor.gameObject.SetActive(true);
         rightControllerAnchor.gameObject.SetActive(true);
-
-
-        // Ensure cascading ownership of child networked objects
-        if (realtimeView.isOwnedLocally)
-        {
-            headTransform.GetComponent<RealtimeTransform>().RequestOwnership();
-            leftHandTransform.GetComponent<RealtimeTransform>().RequestOwnership();
-            rightHandTransform.GetComponent<RealtimeTransform>().RequestOwnership();
-        }
     }
 
     protected override void OnRealtimeModelReplaced(PlayerModel previousModel, PlayerModel currentModel)

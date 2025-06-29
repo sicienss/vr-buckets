@@ -92,6 +92,13 @@ public class Basketball : MonoBehaviour
 
         // SFX
         PlayGrab();
+
+        // Haptics
+        if (args.interactorObject is UnityEngine.XR.Interaction.Toolkit.Interactors.XRBaseInputInteractor controllerInteractor)
+        {
+            XRBaseController controller = controllerInteractor.xrController;
+            controller?.SendHapticImpulse(0.5f, 0.1f);
+        }
     }
 
     private void OnRelease(SelectExitEventArgs args)

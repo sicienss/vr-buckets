@@ -28,6 +28,10 @@ public class LobbyController : MonoBehaviour
             if (pc.realtimeView.isOwnedLocally)
             {
                 foundSelf = true;
+
+                // Reset model attributes
+                pc.Model.playerScore = 0;
+                pc.Model.playerShotStreak = 0;
             }
         }
 

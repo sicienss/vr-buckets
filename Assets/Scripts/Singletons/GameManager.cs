@@ -90,7 +90,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "Lobby")
+        if (scene.name == "LobbyScene")
         {
             // Fade in
             TransitionManager.instance.Fade(0f, 0.5f);

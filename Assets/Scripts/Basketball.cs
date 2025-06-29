@@ -21,7 +21,7 @@ public class Basketball : MonoBehaviour
     private XRGrabInteractable grab;
 
     [SerializeField] private float respawnDistance = 10f;
-    [SerializeField] private float maxTimeBeforeRespawn = 10f;
+    [SerializeField] private float maxTimeBeforeRespawn = 7.5f;
 
     private float timeSinceRelease;
     private bool isHeld = false;

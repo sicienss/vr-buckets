@@ -12,7 +12,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] GameObject matchCodeEntryScreen;
     [SerializeField] TMP_Text inputField;
     [SerializeField] List<Button> keyboardButtons = new List<Button>();
-
+    [SerializeField] GameObject uiBlocker;
 
     private void Awake()
     {
@@ -48,6 +48,8 @@ public class MainMenuController : MonoBehaviour
 
     public void OnCreateMatchClicked()
     {
+        uiBlocker.SetActive(true);
+
         // Create Normcore room w/ random match code
         string code = MatchManager.instance.GenerateMatchCode(3);
         MatchManager.instance.TryJoinRoom(code); // Callbacks below will fire in response to success or failure       
@@ -105,6 +107,8 @@ public class MainMenuController : MonoBehaviour
 
     public void SubmitMatchCode()
     {
+        uiBlocker.SetActive(true);
+
         // Check if submitted match code corresponds to Normcore room
         string code = inputField.text.ToUpperInvariant();
         MatchManager.instance.TryJoinRoom(code); // Callbacks below will fire in response to success or failure       
@@ -124,6 +128,8 @@ public class MainMenuController : MonoBehaviour
     public void GoBackFromMatchCode()
     {
         CloseMatchCodeEntryScreen();
+
+        uiBlocker.SetActive(false);
     }
     
     public void OnSettingsClicked()
@@ -133,6 +139,12 @@ public class MainMenuController : MonoBehaviour
 
     public void OnQuitClicked()
     {
+        StartCoroutine(QuitRoutine());
+    }
+
+    IEnumerator QuitRoutine()
+    {
+        yield return TransitionManager.instance.Fade(1f, 0.5f);
         Application.Quit();
     }
 }

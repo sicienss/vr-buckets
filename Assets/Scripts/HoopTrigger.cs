@@ -15,6 +15,12 @@ public class HoopTrigger : MonoBehaviour
             }
             else if (gameObject.name == "HoopTriggerBottom" && basketball.enteredTop)
             {
+                // Make sure only the ball's *owner* processes the score
+                if (!basketball.realtimeView.isOwnedLocally)
+                {
+                    return;
+                }
+
                 float threePointThreshold = 4; // distance in meters for 3-pointers // TODO: Don't hardcode this here
                 int scoreToAward = basketball.shotDistance > threePointThreshold ? 3 : 2;
                 basketball.owner.Model.playerScore += scoreToAward;

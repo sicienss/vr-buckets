@@ -16,7 +16,7 @@ public class Basketball : MonoBehaviour
 
     public Vector3 originalPosition;
     private Quaternion originalRotation;
-    private RealtimeView realtimeView;
+    public RealtimeView realtimeView;
     private Rigidbody rb;
     private XRGrabInteractable grab;
 
@@ -92,13 +92,6 @@ public class Basketball : MonoBehaviour
 
         // SFX
         PlayGrab();
-
-        // Haptics
-        if (args.interactorObject is UnityEngine.XR.Interaction.Toolkit.Interactors.XRBaseInputInteractor controllerInteractor)
-        {
-            XRBaseController controller = controllerInteractor.xrController;
-            controller?.SendHapticImpulse(0.5f, 0.1f);
-        }
     }
 
     private void OnRelease(SelectExitEventArgs args)
@@ -160,13 +153,13 @@ public class Basketball : MonoBehaviour
         float minDistance = 1.5f;
         float maxDistance = 6f;
         float t = Mathf.InverseLerp(minDistance, maxDistance, horizontalDistance);
-        float correctionFactor = Mathf.Lerp(0.5f, 0.9f, t); // from 50% help to 90% depending on distance
+        float correctionFactor = Mathf.Lerp(0.66f, 0.9f, t); // from 66% help to 90% depending on distance
 
         // Solve for initial velocity needed to reach target under gravity, assuming some clearance height
         float verticalDist = toTarget.y;
 
         float vx = horizontalDistance / timeToTarget;
-        float arcClearance = Mathf.Lerp(1f, 2f, t); // how high the ball should peak above the hoop; lower arc for close shots, higher for far ones
+        float arcClearance = Mathf.Lerp(0.75f, 1.5f, t); // how high the ball should peak above the hoop; lower arc for close shots, higher for far ones
         float adjustedVerticalDist = verticalDist + arcClearance;
         float vy = (adjustedVerticalDist + 0.5f * gravity * timeToTarget * timeToTarget) / timeToTarget;
 
@@ -222,7 +215,7 @@ public class Basketball : MonoBehaviour
 
     IEnumerator ResetTopAfterDelayRoutine()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
         enteredTop = false;
     }
 
@@ -233,12 +226,10 @@ public class Basketball : MonoBehaviour
         {
             if (owner != null && !hasScored)
             {
-                var playerComponent = owner.GetComponent<PlayerComponent>();
-
                 // Only the client that owns the player updates their own model
-                if (playerComponent != null && playerComponent.realtimeView.isOwnedLocally)
+                if (owner.realtimeView.isOwnedLocally)
                 {
-                    playerComponent.Model.playerShotStreak = 0;
+                    owner.Model.playerShotStreak = 0;
                 }
             }
         }

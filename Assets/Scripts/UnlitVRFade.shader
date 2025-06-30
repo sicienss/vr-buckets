@@ -13,6 +13,7 @@ Shader "URP/UnlitVRFade"
             Blend SrcAlpha OneMinusSrcAlpha
             ZWrite Off
             Cull Off
+            ZTest Always // Ensure quad is drawn in front of ray LineRenderer
 
             HLSLPROGRAM
             #pragma vertex vert

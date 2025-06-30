@@ -43,8 +43,14 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: UI
+    uniqueID: 1666229971
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Transition
+    uniqueID: 1914320613
     locked: 0
   m_RenderingLayers:
   - Default

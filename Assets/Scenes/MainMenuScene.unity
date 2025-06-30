@@ -6297,7 +6297,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 1666229971
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1179468850
@@ -12419,12 +12419,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 436732297305594958, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
+      propertyPath: m_SortingLayer
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 436732297305594958, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       propertyPath: m_UseWorldSpace
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 436732297305594958, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1666229971
       objectReference: {fileID: 0}
     - target: {fileID: 3694677201808380756, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12483,14 +12487,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6926112109481670489, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
+      propertyPath: m_SortingLayer
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6926112109481670489, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       propertyPath: m_UseWorldSpace
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6926112109481670489, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1666229971
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3794551441686639094, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+    - {fileID: 4868291218613469789, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2268267819604142664, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}

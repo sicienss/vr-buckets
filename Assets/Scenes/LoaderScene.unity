@@ -291,6 +291,11 @@ MonoBehaviour:
   audioSource: {fileID: 1302277430}
   whistle: {fileID: 8300000, guid: 8ae846f3d4570c84e8e8f1f6753040a4, type: 3}
   buzzer: {fileID: 8300000, guid: 9ce621bf39fd8b9478bd3d9e767f3c50, type: 3}
+  count5: {fileID: 8300000, guid: dbe71f1bbdead6e40b6cdd30f9eee780, type: 3}
+  count4: {fileID: 8300000, guid: dfb8644f34b6c424b96aa6d53671938e, type: 3}
+  count3: {fileID: 8300000, guid: f2ab23f384c6f434381f33ccef47b963, type: 3}
+  count2: {fileID: 8300000, guid: 150a4b46f89a02542875238eec746b33, type: 3}
+  count1: {fileID: 8300000, guid: 48b0780d21844dc46b58858dcdb33d3d, type: 3}
 --- !u!114 &1302277428
 MonoBehaviour:
   m_ObjectHideFlags: 0

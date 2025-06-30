@@ -20,7 +20,11 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip whistle;
     [SerializeField] AudioClip buzzer;
-
+    [SerializeField] AudioClip count5;
+    [SerializeField] AudioClip count4;
+    [SerializeField] AudioClip count3;
+    [SerializeField] AudioClip count2;
+    [SerializeField] AudioClip count1;
 
     private void Awake()
     {
@@ -189,9 +193,11 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         // Do countdown
         TMP_Text label = GameObject.Find("CountdownLabel")?.GetComponent<TMP_Text>();
 
+        var countdownClips = new AudioClip[] { count1, count2, count3, count4, count5 }; // SFX
         for (int i = 5; i >= 1; i--)
         {
             if (label != null) label.text = i.ToString();
+            audioSource.PlayOneShot(countdownClips[i - 1], 1f); // SFX
             yield return new WaitForSeconds(1f);
         }
 

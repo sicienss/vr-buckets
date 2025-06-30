@@ -25,6 +25,7 @@ public class Basketball : MonoBehaviour
 
     private float timeSinceRelease;
     public bool isHeld = false;
+    public bool isThrown = false;
     public bool hasScored = false; // bool for tracking whether ball scored, used for (1) preventing multiple scoring when bounding around rim, (2) blocking streak reset on collision w/ ground
     public bool enteredTop = false; // bool for tracking whether ball went through top trigger, uses for (1) preventing false positive scores, (2) disabling HoopAssistZone
     public float shotDistance; // distance the ball was shot from, used to determine score
@@ -97,6 +98,7 @@ public class Basketball : MonoBehaviour
     private void OnRelease(SelectExitEventArgs args)
     {
         isHeld = false;
+        isThrown = true;
         timeSinceRelease = 0f;
 
         rb.isKinematic = false;
@@ -177,7 +179,14 @@ public class Basketball : MonoBehaviour
 
     private void Update()
     {
-        if (!realtimeView.isOwnedLocally || isHeld)
+        // Skip if ball is held or was just thrown
+        if (isHeld || isThrown)
+            return;
+
+        // If no one owns this object, allow the host (clientID == 0) to control it
+        bool shouldMonitor = realtimeView.isOwnedLocally || (realtimeView.ownerID == -1 && GameManager.instance.realtime.clientID == 0);
+
+        if (!shouldMonitor)
             return;
 
         timeSinceRelease += Time.deltaTime;
@@ -232,6 +241,8 @@ public class Basketball : MonoBehaviour
                     owner.Model.playerShotStreak = 0;
                 }
             }
+
+            isThrown = false;
         }
 
         // SFX

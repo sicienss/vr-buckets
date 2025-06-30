@@ -18,9 +18,9 @@ public class LobbyPlayerRow : MonoBehaviour
         }
     }
 
-    public void SetPlayer(string name, RealtimeAvatarVoice realtimeAvatarVoice)
+    public void SetPlayer(PlayerComponent pc, RealtimeAvatarVoice realtimeAvatarVoice)
     {
-        playerNameLabel.text = name;
+        playerNameLabel.text = $"{pc.Model.playerName}" + (pc.realtimeView.isOwnedLocallySelf ? "(you)" : "");
         this.realtimeAvatarVoice = realtimeAvatarVoice;
     }
 

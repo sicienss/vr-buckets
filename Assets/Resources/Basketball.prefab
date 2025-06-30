@@ -237,9 +237,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   originalPosition: {x: 0, y: 0, z: 0}
+  realtimeView: {fileID: 0}
   respawnDistance: 8
   maxTimeBeforeRespawn: 10
+  isHeld: 0
   hasScored: 0
+  enteredTop: 0
   shotDistance: 0
   audioSource: {fileID: 7823703406799361290}
   ball_bounce_soft: {fileID: 8300000, guid: 3dd6195525a21144ebe2648bfef76edc, type: 3}

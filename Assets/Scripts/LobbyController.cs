@@ -83,19 +83,19 @@ public class LobbyController : MonoBehaviour
         var voice = pc.GetComponent<RealtimeAvatarVoice>();
         var rowScript = row.GetComponent<LobbyPlayerRow>();
 
-        rowScript.SetPlayer(pc.Model.playerName, voice);
+        rowScript.SetPlayer(pc, voice);
 
         // store ownerID and row in dict for easy reference
-        playerRowsDict[pc.realtimeView.ownerID] = row;
+        playerRowsDict[pc.realtimeView.ownerIDSelf] = row;
     }
 
     void HandlePlayerDespawned(PlayerComponent pc)
     {
         // Destroy row for player in UI
-        if (playerRowsDict.TryGetValue(pc.realtimeView.ownerID, out var row))
+        if (playerRowsDict.TryGetValue(pc.realtimeView.ownerIDSelf, out var row))
         {
             Destroy(row);
-            playerRowsDict.Remove(pc.realtimeView.ownerID);
+            playerRowsDict.Remove(pc.realtimeView.ownerIDSelf);
         }
     }
 

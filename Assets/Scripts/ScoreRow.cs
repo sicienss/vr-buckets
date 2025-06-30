@@ -10,21 +10,30 @@ public class ScoreRow : MonoBehaviour
     [SerializeField] private TMP_Text playerScoreLabel;
     [SerializeField] private TMP_Text playerShotStreakLabel;
 
-    private PlayerModel playerModel;
+    public PlayerModel playerModel;
 
     private Color defaultColor;
     private RealtimeAvatarVoice realtimeAvatarVoice;
 
-    public void Bind(PlayerModel model, RealtimeAvatarVoice voice)
+    private void Awake()
     {
-        playerModel = model;
+        if (background != null)
+        {
+            defaultColor = background.color;
+        }
+    }
+
+    public void Bind(PlayerComponent playerComponent, RealtimeAvatarVoice voice)
+    {
+        playerModel = playerComponent.Model;
         realtimeAvatarVoice = voice;
 
-        playerNameLabel.text = model.playerName;
-        playerScoreLabel.text = model.playerScore.ToString();
+        playerNameLabel.text = $"{playerComponent.Model.playerName}" + (playerComponent.realtimeView.isOwnedLocallySelf ? "(you)" : "");
+        playerScoreLabel.text = playerComponent.Model.playerScore.ToString();
+        playerShotStreakLabel.text = playerComponent.Model.playerShotStreak.ToString();
 
-        model.playerScoreDidChange += OnPlayerScoreChanged;
-        model.playerShotStreakDidChange += OnPlayerShotStreakChanged;
+        playerComponent.Model.playerScoreDidChange += OnPlayerScoreChanged;
+        playerComponent.Model.playerShotStreakDidChange += OnPlayerShotStreakChanged;
     }
 
     private void OnDestroy()
@@ -46,28 +55,12 @@ public class ScoreRow : MonoBehaviour
         playerShotStreakLabel.text = value.ToString();
     }
 
-
-
-    private void Awake()
-    {
-        if (background != null)
-        {
-            defaultColor = background.color;
-        }
-    }
-
-    public void SetPlayer(string name, RealtimeAvatarVoice realtimeAvatarVoice)
-    {
-        playerNameLabel.text = name;
-        this.realtimeAvatarVoice = realtimeAvatarVoice;
-    }
-
     private void Update()
     {
-        //if (realtimeAvatarVoice == null || background == null) return;
+        if (realtimeAvatarVoice == null || background == null) return;
 
-        //// Set color depending on whether the player is speaking
-        //bool isSpeaking = realtimeAvatarVoice.voiceVolume > 0.025f;
-        //background.color = isSpeaking ? Color.green : defaultColor;
+        // Set color depending on whether the player is speaking
+        bool isSpeaking = realtimeAvatarVoice.voiceVolume > 0.025f;
+        background.color = isSpeaking ? Color.green : defaultColor;
     }
 }

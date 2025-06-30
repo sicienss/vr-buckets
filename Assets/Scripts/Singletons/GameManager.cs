@@ -35,6 +35,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
 
     protected override void OnRealtimeModelReplaced(GameManagerModel previousModel, GameManagerModel currentModel)
     {
+        Debug.Log("GameManager realtime model replaced");
         if (previousModel != null)
         {
             previousModel.gameStateDidChange -= OnGameStateChanged;
@@ -103,18 +104,6 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         }
         else if (scene.name == "BasketballCourtScene")
         {
-            //// Go to an open spawn point -- TODO: This is a bad algo, do something better...
-            //var players = FindObjectsOfType<PlayerComponent>();
-            //var playerSpawnPoints = FindObjectsOfType<PlayerSpawnPoint>();
-            //foreach (var playerSpawnPoint in playerSpawnPoints)
-            //{
-            //    if (!players.Any(p => Vector3.Distance(p.transform.position, playerSpawnPoint.transform.position) < 1))
-            //    { 
-            //        transform.position = playerSpawnPoint.transform.position;
-            //        break;
-            //    }
-            //}
-
             // Fade in
             TransitionManager.instance.Fade(0f, 0.5f);
 
@@ -270,7 +259,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
             GameObject rowGameObject = Instantiate(scoreRowPrefab, GameObject.Find("ScoreRowContainer").transform);
             rowGameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
             ScoreRow row = rowGameObject.GetComponent<ScoreRow>();
-            row.Bind(player.Model, player.GetComponent<RealtimeAvatarVoice>());
+            row.Bind(player, player.GetComponent<RealtimeAvatarVoice>());
         }
     }
 

@@ -78,8 +78,6 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
                 string randomName = namePool[UnityEngine.Random.Range(0, namePool.Length)];
                 model.playerName = randomName;
             }
-
-            OnPlayerNameChanged(model, model.playerName);
         }
 
         OnPlayerSpawned?.Invoke(this);

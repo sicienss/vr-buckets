@@ -296,6 +296,7 @@ MonoBehaviour:
   count3: {fileID: 8300000, guid: f2ab23f384c6f434381f33ccef47b963, type: 3}
   count2: {fileID: 8300000, guid: 150a4b46f89a02542875238eec746b33, type: 3}
   count1: {fileID: 8300000, guid: 48b0780d21844dc46b58858dcdb33d3d, type: 3}
+  greatJob: {fileID: 8300000, guid: 27ef6910b0f081a4ba942c70bad5a350, type: 3}
 --- !u!114 &1302277428
 MonoBehaviour:
   m_ObjectHideFlags: 0

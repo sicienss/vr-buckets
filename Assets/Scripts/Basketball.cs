@@ -166,7 +166,7 @@ public class Basketball : MonoBehaviour
         float verticalDist = toTarget.y;
 
         float vx = horizontalDistance / timeToTarget;
-        float arcClearance = Mathf.Lerp(0.66f, 1.66f, t); // how high the ball should peak above the hoop; lower arc for close shots, higher for far ones
+        float arcClearance = Mathf.Lerp(1f, 2f, t); // how high the ball should peak above the hoop; lower arc for close shots, higher for far ones
         float adjustedVerticalDist = verticalDist + arcClearance;
         float vy = (adjustedVerticalDist + 0.5f * gravity * timeToTarget * timeToTarget) / timeToTarget;
 

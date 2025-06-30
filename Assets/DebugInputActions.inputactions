@@ -1,0 +1,74 @@
+{
+    "name": "DebugInputActions",
+    "maps": [
+        {
+            "name": "DebugControls",
+            "id": "96d4fed6-8f8b-4e5a-963f-84c95242983f",
+            "actions": [
+                {
+                    "name": "Score",
+                    "type": "Button",
+                    "id": "dbff7c8e-36ef-4ab9-9e59-69f75fb6c86b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CreateRoom",
+                    "type": "Button",
+                    "id": "08a14356-dff1-45e9-9f40-d4fcffa6d7ca",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "StartMatch",
+                    "type": "Button",
+                    "id": "f40e5b76-7449-4f78-9f25-bc70459a5710",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6073f07a-1491-4bef-bb73-547abfb36c33",
+                    "path": "<Keyboard>/#(3)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Score",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "78459ea9-7753-4789-b060-621fd134b68a",
+                    "path": "<Keyboard>/#(1)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CreateRoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a8384d6-45c5-430e-896a-80e65da9be52",
+                    "path": "<Keyboard>/#(2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StartMatch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

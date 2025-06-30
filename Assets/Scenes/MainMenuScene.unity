@@ -5136,6 +5136,50 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
+--- !u!114 &997832297 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3668684447350639280, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+  m_PrefabInstance: {fileID: 4601616787124351235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b734f2bd29eeddd4d85afb0c266228c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &997832298 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 305637439857005221, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+  m_PrefabInstance: {fileID: 4601616787124351235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601616787124351237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6803edce0201f574f923fd9d10e5b30a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &997832299 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1937802161674609776, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+  m_PrefabInstance: {fileID: 4601616787124351235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b734f2bd29eeddd4d85afb0c266228c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &997832300 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5461864803269676356, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+  m_PrefabInstance: {fileID: 4601616787124351235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601616787124351238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6803edce0201f574f923fd9d10e5b30a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1059480282
 GameObject:
   m_ObjectHideFlags: 0
@@ -12194,7 +12238,7 @@ MonoBehaviour:
   m_BypassUIToolkitEvents: 0
   m_ActiveInputMode: 1
   m_EnableXRInput: 1
-  m_EnableMouseInput: 0
+  m_EnableMouseInput: 1
   m_EnableTouchInput: 0
   m_EnableGamepadInput: 0
   m_EnableJoystickInput: 0
@@ -12441,7 +12485,7 @@ PrefabInstance:
     - target: {fileID: 2904417046492503096, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       propertyPath: m_LeftHandTurnInput.m_InputActionReference
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: -7374733323251553461, guid: c348712bda248c246b8c49b3db54643f, type: 3}
     - target: {fileID: 3694677201808380756, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -12530,6 +12574,8 @@ PrefabInstance:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 2585943928080101666, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+    - {fileID: 3794551441686639094, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+    - {fileID: 4868291218613469789, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2268267819604142664, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
@@ -12539,9 +12585,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6555672507018617325, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4601616787124351240}
+    - targetCorrespondingSourceObject: {fileID: 6555672507018617325, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4601616787124351242}
     - targetCorrespondingSourceObject: {fileID: 281925914224869531, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4601616787124351239}
+    - targetCorrespondingSourceObject: {fileID: 281925914224869531, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4601616787124351241}
   m_SourcePrefab: {fileID: 100100000, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
 --- !u!4 &4601616787124351236 stripped
 Transform:
@@ -12858,6 +12910,96 @@ MonoBehaviour:
   m_OverrideInteractorLineOrigin: 1
   m_LineOriginTransform: {fileID: 0}
   m_LineOriginOffset: 0
+--- !u!114 &4601616787124351241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601616787124351237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd0b9921bce4eeb49bd05815b1135ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractorSourceObject: {fileID: 997832298}
+  m_HapticImpulsePlayer: {fileID: 997832297}
+  m_PlaySelectEntered: 0
+  m_SelectEnteredData:
+    m_Amplitude: 0.5
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlaySelectExited: 0
+  m_SelectExitedData:
+    m_Amplitude: 0.5
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlaySelectCanceled: 0
+  m_SelectCanceledData:
+    m_Amplitude: 0.5
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlayHoverEntered: 1
+  m_HoverEnteredData:
+    m_Amplitude: 0.25
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlayHoverExited: 0
+  m_HoverExitedData:
+    m_Amplitude: 0.25
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlayHoverCanceled: 0
+  m_HoverCanceledData:
+    m_Amplitude: 0.25
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_AllowHoverHapticsWhileSelecting: 0
+--- !u!114 &4601616787124351242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601616787124351238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd0b9921bce4eeb49bd05815b1135ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractorSourceObject: {fileID: 997832300}
+  m_HapticImpulsePlayer: {fileID: 997832299}
+  m_PlaySelectEntered: 0
+  m_SelectEnteredData:
+    m_Amplitude: 0.5
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlaySelectExited: 0
+  m_SelectExitedData:
+    m_Amplitude: 0.5
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlaySelectCanceled: 0
+  m_SelectCanceledData:
+    m_Amplitude: 0.5
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlayHoverEntered: 1
+  m_HoverEnteredData:
+    m_Amplitude: 0.25
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlayHoverExited: 0
+  m_HoverExitedData:
+    m_Amplitude: 0.25
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_PlayHoverCanceled: 0
+  m_HoverCanceledData:
+    m_Amplitude: 0.25
+    m_Duration: 0.1
+    m_Frequency: 0
+  m_AllowHoverHapticsWhileSelecting: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Normal.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Normal.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 
 public class GameManager : RealtimeComponent<GameManagerModel>
@@ -25,6 +26,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     [SerializeField] AudioClip count3;
     [SerializeField] AudioClip count2;
     [SerializeField] AudioClip count1;
+    [SerializeField] AudioClip greatJob;
 
     private void Awake()
     {
@@ -248,6 +250,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
             .OrderByDescending(pc => pc.Model.playerScore)
             .FirstOrDefault();
         GameObject.Find("CountdownLabel").GetComponent<TMPro.TMP_Text>().text = $"{winnerPlayerComponent.Model.playerName} Wins";
+        audioSource.PlayOneShot(greatJob, 1f); // SFX
         yield return new WaitForSeconds(5f);
 
         // Fade out
@@ -279,5 +282,38 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     public void PlayBuzzer()
     {
         audioSource.PlayOneShot(buzzer, 1f);
+    }
+
+
+    public void RefrestRayInteractors()
+    {
+        StartCoroutine(RefreshRayInteractorsRoutine());
+    }
+
+    IEnumerator RefreshRayInteractorsRoutine()
+    {
+        // Find all PlayerComponent instances in the scene
+        var playerComponents = FindObjectsOfType<PlayerComponent>();
+
+        // Filter to just the locally owned PlayerComponent
+        foreach (var player in playerComponents)
+        {
+            if (!player.realtimeView.isOwnedLocally)
+                continue;
+
+            // Get XRRayInteractors of locally owned player
+            XRRayInteractor[] rayInteractors = player.GetComponentsInChildren<XRRayInteractor>(true);
+
+            foreach (var rayInteractor in rayInteractors)
+                rayInteractor.enabled = false;
+
+            yield return null; // wait one frame
+
+            foreach (var rayInteractor in rayInteractors)
+                rayInteractor.enabled = true;
+
+            Debug.Log("Refreshed ray interactors for local player.");
+            yield break;
+        }
     }
 }

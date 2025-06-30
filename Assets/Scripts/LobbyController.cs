@@ -48,6 +48,8 @@ public class LobbyController : MonoBehaviour
                 realtime.didConnectToRoom += OnConnected;
             }
         }
+
+        GameManager.instance.RefrestRayInteractors(); // Bandaid to fix issue w/ UI not interactable on returning to Lobby from Gameplay
     }
 
     void OnConnected(Realtime realtime)

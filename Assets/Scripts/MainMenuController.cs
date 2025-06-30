@@ -14,6 +14,21 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] List<Button> keyboardButtons = new List<Button>();
     [SerializeField] GameObject uiBlocker;
 
+    private DebugInputActions debugInput;
+
+
+    private void OnEnable()
+    {
+        debugInput = new DebugInputActions();
+        debugInput.Enable();
+        debugInput.DebugControls.CreateRoom.performed += ctx => OnCreateMatchClicked();
+    }
+
+    private void OnDisable()
+    {
+        debugInput.Disable();
+    }
+
     private void Awake()
     {
         // Subscribe to stuff

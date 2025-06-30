@@ -28,7 +28,7 @@ public class ScoreRow : MonoBehaviour
         playerModel = playerComponent.Model;
         realtimeAvatarVoice = voice;
 
-        playerNameLabel.text = $"{playerComponent.Model.playerName}" + (playerComponent.realtimeView.isOwnedLocallySelf ? "(you)" : "");
+        playerNameLabel.text = $"{playerComponent.Model.playerName}" + (playerComponent.realtimeView.isOwnedLocallySelf ? " (you)" : "");
         playerScoreLabel.text = playerComponent.Model.playerScore.ToString();
         playerShotStreakLabel.text = playerComponent.Model.playerShotStreak.ToString();
 
@@ -57,10 +57,10 @@ public class ScoreRow : MonoBehaviour
 
     private void Update()
     {
-        if (realtimeAvatarVoice == null || background == null) return;
+        //if (realtimeAvatarVoice == null || background == null) return;
 
-        // Set color depending on whether the player is speaking
-        bool isSpeaking = realtimeAvatarVoice.voiceVolume > 0.025f;
-        background.color = isSpeaking ? Color.green : defaultColor;
+        //// Set color depending on whether the player is speaking
+        //bool isSpeaking = realtimeAvatarVoice.voiceVolume > 0.025f;
+        //background.color = isSpeaking ? Color.green : defaultColor;
     }
 }

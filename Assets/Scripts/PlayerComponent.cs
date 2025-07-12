@@ -32,33 +32,6 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
 
     void Start()
     {
-        // Defer activation until ownership is known
-        StartCoroutine(WaitForOwnershipThenSetup());
-    }
-
-    private IEnumerator WaitForOwnershipThenSetup()
-    {
-        // Wait until the RealtimeView is owned locally or definitely not
-        while (!realtimeView.isOwnedLocally && !realtimeView.isOwnedRemotely)
-            yield return null;
-
-        if (realtimeView.isOwnedLocally)
-        {
-            xrRigRoot.SetActive(true);
-
-            headTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
-            leftHandTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
-            rightHandTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
-        }
-        else
-        {
-            xrRigRoot.SetActive(false);
-        }
-
-        // Anchors should still be visible for all players
-        headAnchor.gameObject.SetActive(true);
-        leftControllerAnchor.gameObject.SetActive(true);
-        rightControllerAnchor.gameObject.SetActive(true);
     }
 
     protected override void OnRealtimeModelReplaced(PlayerModel previousModel, PlayerModel currentModel)
@@ -80,6 +53,16 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
             }
         }
 
+        // Rig is only active is realtimeView is owned locally
+        if (realtimeView.isOwnedLocally)
+        {
+            xrRigRoot.SetActive(true);
+        }
+        else
+        {
+            xrRigRoot.SetActive(false);
+        }
+
         OnPlayerSpawned?.Invoke(this);
     }
 
@@ -93,9 +76,17 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
         OnPlayerDespawned?.Invoke(this);
     }
 
+    bool hasRequestedOwnership = false;
     private void Update()
     {
         if (!realtimeView.isOwnedLocally) return;
+
+        if (!hasRequestedOwnership)
+        {
+            headTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
+            leftHandTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
+            rightHandTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
+        }
 
         // Owner updates head and hands, and the transform is synced on network via Normcore's RealtimeTransform
         headTransform.position = headAnchor.position;

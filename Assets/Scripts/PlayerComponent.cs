@@ -86,6 +86,10 @@ public class PlayerComponent : RealtimeComponent<PlayerModel>
             headTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
             leftHandTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
             rightHandTransform.GetComponent<RealtimeTransform>()?.RequestOwnership();
+
+            headTransform.GetComponent<RealtimeView>()?.RequestOwnership();
+            leftHandTransform.GetComponent<RealtimeView>()?.RequestOwnership();
+            rightHandTransform.GetComponent<RealtimeView>()?.RequestOwnership();
         }
 
         // Owner updates head and hands, and the transform is synced on network via Normcore's RealtimeTransform

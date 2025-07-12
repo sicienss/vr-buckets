@@ -208,7 +208,6 @@ public class GameManager : RealtimeComponent<GameManagerModel>
 
     private IEnumerator GameplayRoutine()
     {
-        // Do countdown
         TMP_Text label = GameObject.Find("TimerLabel")?.GetComponent<TMP_Text>();
 
         int matchDurationSeconds = 60; // TODO: don't hardcode this here

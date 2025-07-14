@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
+using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
@@ -106,17 +107,68 @@ public class Basketball : MonoBehaviour
         rb.isKinematic = false;
         rb.useGravity = true;
 
-        StartCoroutine(AdjustThrowDirectionNextFrame(args));
+        //StartCoroutine(AdjustThrowDirectionNextFrame(args));
+
+        // Identify which hand released the object
+        var interactor = args.interactorObject.transform;
+        if (interactor == null) return;
+
+        XRNode releasingNode;
+
+        if (interactor.name.ToLower().Contains("left"))
+            releasingNode = XRNode.LeftHand;
+        else if (interactor.name.ToLower().Contains("right"))
+            releasingNode = XRNode.RightHand;
+        else
+            return; // Unknown hand
+
+        // Get the releasing device
+        var device = InputDevices.GetDeviceAtXRNode(releasingNode);
+
+        // Get velocity from the releasing hand
+        Vector3 releaseVelocity = Vector3.zero;
+        Vector3 releaseAngularVelocity = Vector3.zero;
+        device.TryGetFeatureValue(CommonUsages.deviceVelocity, out releaseVelocity);
+        device.TryGetFeatureValue(CommonUsages.deviceAngularVelocity, out releaseAngularVelocity);
+
+        // Adjust velocity for gamefeel -- translate some of the XZ force to Y axis, and boost XZ
+        Vector3 adjustedVelocity = releaseVelocity;
+        float xzMagnitude = new Vector3(releaseVelocity.x, 0f, releaseVelocity.z).magnitude;
+        if (releaseVelocity.y > 1f)
+        {
+            float yBoost = xzMagnitude * 0.66f;
+            adjustedVelocity.y += yBoost;
+        }
+        adjustedVelocity.x *= 1.5f;
+        adjustedVelocity.z *= 1.5f;
+
+        // Apply velocity to rb
+        rb.linearVelocity = adjustedVelocity;
+        rb.angularVelocity = releaseAngularVelocity;
     }
 
     private IEnumerator AdjustThrowDirectionNextFrame(SelectExitEventArgs args)
     {
-        // Wait a frame so XR Toolkit can apply built-in physics
-        yield return null;
+        yield return null; // Let XR Toolkit apply its velocity
 
+        Vector3 velocity = rb.linearVelocity;
 
-        //// Adjust velocity by helping on Y-axis slightly
-        //rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y * 1.25f, rb.linearVelocity.z);
+        // Take some of the horizontal force (XZ plane)
+        Vector3 horizontal = new Vector3(velocity.x, 0f, velocity.z);
+        float horizontalMagnitude = horizontal.magnitude;
+
+        // Convert a fraction of horizontal force into vertical boost
+        float arcFactor = 0.5f; // tune this!
+        float extraY = horizontalMagnitude * arcFactor;
+
+        // Apply it
+        velocity.y += extraY;
+
+        //// Also boost XZ
+        //velocity.x *= 1.25f;
+        //velocity.z *= 1.25f;
+
+        rb.linearVelocity = velocity;
     }
 
     private void Update()

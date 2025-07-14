@@ -1505,6 +1505,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -8198699208435500284, guid: c348712bda248c246b8c49b3db54643f, type: 3}
     - target: {fileID: 281925914224869531, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+      propertyPath: m_Name
+      value: Ray Interactor (right)
+      objectReference: {fileID: 0}
+    - target: {fileID: 281925914224869531, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -1615,6 +1619,10 @@ PrefabInstance:
     - target: {fileID: 6095091192399277516, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6555672507018617325, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
+      propertyPath: m_Name
+      value: Ray Interactor (left)
       objectReference: {fileID: 0}
     - target: {fileID: 6555672507018617325, guid: 1ea5b03bc26e1dd49a060cd36b86abe7, type: 3}
       propertyPath: m_IsActive

@@ -107,16 +107,36 @@ public class GameManager : RealtimeComponent<GameManagerModel>
             // Fade in
             TransitionManager.instance.Fade(0f, 0.5f);
 
-            // Host transitions state
-            // TODO: We should add _isReady to PlayerModel and set to true only when scenes have loaded, so host can wait for everyone to load before advancing state
+            // Set player to ready
+            foreach (PlayerComponent playerComponent in FindObjectsOfType<PlayerComponent>())
+            {
+                if (playerComponent.realtimeView.isOwnedLocally)
+                {
+                    playerComponent.Model.playerIsReady = true;
+                }
+            }
+
             if (realtime.clientID == 0)
             {
-                SpawnBalls(); // Host spawns balls
-                model.gameState = 2;
+                // Host waits for all other players to finish loading scene
+                StartCoroutine(WaitForPlayersToBeReady());
             }
         }
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    IEnumerator WaitForPlayersToBeReady()
+    {
+        yield return new WaitUntil(() =>
+        {
+            var players = FindObjectsOfType<PlayerComponent>();
+            return players.Length > 0 && players.All(p => p.Model != null && p.Model.playerIsReady);
+        });
+
+        // Host transitions state
+        SpawnBalls(); // Host spawns balls
+        model.gameState = 2;
     }
 
     private void OnSceneUnloaded(Scene scene)
@@ -165,6 +185,15 @@ public class GameManager : RealtimeComponent<GameManagerModel>
 
     IEnumerator GoToLobbyRoutine()
     {
+        // Set player to not ready
+        foreach (PlayerComponent playerComponent in FindObjectsOfType<PlayerComponent>())
+        {
+            if (playerComponent.realtimeView.isOwnedLocally)
+            {
+                playerComponent.Model.playerIsReady = false;
+            }
+        }
+
         // Fade out
         yield return TransitionManager.instance.Fade(1f, 0.5f);
 

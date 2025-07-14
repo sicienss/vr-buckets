@@ -247,7 +247,20 @@ public class Basketball : MonoBehaviour
         else if (collision.gameObject.CompareTag("Rim"))
             PlayRimHitSound(impact);
         else if (collision.gameObject.CompareTag("Backboard"))
+        {
             PlayBackboardHitSound();
+
+            // Very subtle redirect toward hoop
+            GameObject hoopCenter = GameObject.Find("Rim");
+            Vector3 toHoop = (hoopCenter.transform.position - transform.position).normalized;
+            Vector3 currentVelocity = rb.linearVelocity;
+
+            // Blend current velocity with hoop direction
+            float assistStrength = 0.2f; // Tune this! 0 = no help, 1 = full redirect
+            Vector3 assistedVelocity = Vector3.Lerp(currentVelocity, toHoop * currentVelocity.magnitude, assistStrength);
+
+            rb.linearVelocity = assistedVelocity;
+        }
     }
 
     public  void PlayBounceSound(float impact)

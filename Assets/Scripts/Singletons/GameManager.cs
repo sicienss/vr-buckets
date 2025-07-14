@@ -272,8 +272,8 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         audioSource.PlayOneShot(greatJob, 1f); // SFX
         yield return new WaitForSeconds(5f);
 
-        // Fade out
-        yield return TransitionManager.instance.Fade(1f, 0.5f);
+        //// Fade out
+        //yield return TransitionManager.instance.Fade(1f, 0.5f);
 
         // Host transitions state
         if (realtime.clientID == 0)

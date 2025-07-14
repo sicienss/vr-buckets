@@ -8,6 +8,8 @@ using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+
 
 [RequireComponent(typeof(XRGrabInteractable))]
 public class Basketball : MonoBehaviour
@@ -104,77 +106,17 @@ public class Basketball : MonoBehaviour
         rb.isKinematic = false;
         rb.useGravity = true;
 
-        StartCoroutine(AdjustThrowDirectionNextFrame());
+        StartCoroutine(AdjustThrowDirectionNextFrame(args));
     }
 
-    private IEnumerator AdjustThrowDirectionNextFrame()
+    private IEnumerator AdjustThrowDirectionNextFrame(SelectExitEventArgs args)
     {
-        // Wait until next frame so XR can apply velocity
+        // Wait a frame so XR Toolkit can apply built-in physics
         yield return null;
 
-        // ADJUST BALL TRAJECTORY -- NAIVE APPROACH
-        //Vector3 intendedDir = rb.linearVelocity.normalized;
-        //Vector3 hoopDir = (GameObject.Find("HoopAimPoint").transform.position - transform.position).normalized;
-        //Vector3 correctedDir = Vector3.Lerp(intendedDir, hoopDir, 0.50f); // 50% correction
 
-        //rb.linearVelocity = correctedDir * rb.linearVelocity.magnitude;
-
-
-        // ADJUST BALL TRAJECTORY -- SOPHISTICATED APPROACH
-        Vector3 start = transform.position;
-        Vector3 hoop = GameObject.Find("HoopAimPoint").transform.position;
-
-        // Choose a target arc point a bit above the hoop
-        Vector3 target = hoop + Vector3.up * 1.5f;
-
-        // Get original throw direction and direction to hoop
-        Vector3 originalDir = rb.linearVelocity.normalized;
-        Vector3 hoopDir = (target - start).normalized;
-
-        // Only apply arc correction if within angle threshold
-        float angleToHoop = Vector3.Angle(originalDir, hoopDir);
-        if (angleToHoop > 45f)
-        {
-            yield break; // Aim is too far off — don't assist
-        }
-
-        // Physics constants
-        float gravity = Mathf.Abs(Physics.gravity.y);
-
-        Vector3 toTarget = target - start;
-
-        // Set time to target based on distance
-        Vector3 horizontal = new Vector3(toTarget.x, 0f, toTarget.z);
-        float horizontalDistance = horizontal.magnitude;
-        float baseTime = 0.35f; // minimum duration for close throws
-        float timePerMeter = 0.15f;
-        float timeToTarget = baseTime + horizontalDistance * timePerMeter;
-        shotDistance = horizontalDistance;
-
-        // Determine parameter t to help the player more the farther they are away
-        float minDistance = 1.5f;
-        float maxDistance = 6f;
-        float t = Mathf.InverseLerp(minDistance, maxDistance, horizontalDistance);
-        float correctionFactor = Mathf.Lerp(0.66f, 0.9f, t); // from 66% help to 90% depending on distance
-
-        // Solve for initial velocity needed to reach target under gravity, assuming some clearance height
-        float verticalDist = toTarget.y;
-
-        float vx = horizontalDistance / timeToTarget;
-        float arcClearance = Mathf.Lerp(0.75f, 1.5f, t); // how high the ball should peak above the hoop; lower arc for close shots, higher for far ones
-        float adjustedVerticalDist = verticalDist + arcClearance;
-        float vy = (adjustedVerticalDist + 0.5f * gravity * timeToTarget * timeToTarget) / timeToTarget;
-
-        Vector3 throwDirection = horizontal.normalized * vx + Vector3.up * vy;
-
-        // Recalculate velocities with new timeToTarget
-        vx = horizontalDistance / timeToTarget;
-        vy = (verticalDist + 0.5f * gravity * timeToTarget * timeToTarget) / timeToTarget;
-        throwDirection = horizontal.normalized * vx + Vector3.up * vy;
-
-        Vector3 original = rb.linearVelocity;
-        Vector3 finalVelocity = Vector3.Lerp(original, throwDirection, correctionFactor);
-        rb.linearVelocity = finalVelocity;
+        //// Adjust velocity by helping on Y-axis slightly
+        //rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y * 1.25f, rb.linearVelocity.z);
     }
 
     private void Update()

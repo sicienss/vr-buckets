@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7920335200799382674}
   - component: {fileID: 8117163535388285931}
   - component: {fileID: 3366311261303409865}
-  - component: {fileID: 1186234473026681701}
   - component: {fileID: 3315194686738870563}
   - component: {fileID: 85000326655398886}
   - component: {fileID: 7904208635180283769}
@@ -69,7 +68,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3358184195829520971}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.624
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -169,7 +168,7 @@ MonoBehaviour:
   m_SnapToColliderVolume: 1
   m_ReinitializeDynamicAttachEverySingleGrab: 1
   m_AttachEaseInTime: 0.15
-  m_MovementType: 0
+  m_MovementType: 2
   m_VelocityDamping: 1
   m_VelocityScale: 1
   m_AngularVelocityDamping: 1
@@ -203,26 +202,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_ThrowVelocityScale: 1.5
+  m_ThrowVelocityScale: 1
   m_ThrowAngularVelocityScale: 1
-  m_ForceGravityOnDetach: 0
+  m_ForceGravityOnDetach: 1
   m_RetainTransformParent: 1
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
   m_FarAttachMode: 0
---- !u!114 &1186234473026681701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3358184195829520971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e85a06131b1f69c4097cf07a563e2614, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3315194686738870563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,6 +228,7 @@ MonoBehaviour:
   respawnDistance: 8
   maxTimeBeforeRespawn: 10
   isHeld: 0
+  isThrown: 0
   hasScored: 0
   enteredTop: 0
   shotDistance: 0

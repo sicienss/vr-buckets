@@ -104,9 +104,6 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         }
         else if (scene.name == "BasketballCourtScene")
         {
-            // Fade in
-            TransitionManager.instance.Fade(0f, 0.5f);
-
             // Set player to ready
             foreach (PlayerComponent playerComponent in FindObjectsOfType<PlayerComponent>())
             {
@@ -210,9 +207,14 @@ public class GameManager : RealtimeComponent<GameManagerModel>
         // Create a score rows for each player
         CreateScoreRows();
 
-        // Do countdown
+        // Get reference to label
         TMP_Text label = GameObject.Find("CountdownLabel")?.GetComponent<TMP_Text>();
+        label.text = "";
 
+        // Fade in
+        TransitionManager.instance.Fade(0f, 0.5f);
+
+        // Do countdown
         var countdownClips = new AudioClip[] { count1, count2, count3, count4, count5 }; // SFX
         for (int i = 5; i >= 1; i--)
         {

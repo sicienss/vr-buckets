@@ -136,7 +136,7 @@ public class Basketball : MonoBehaviour
         float xzMagnitude = new Vector3(releaseVelocity.x, 0f, releaseVelocity.z).magnitude;
         if (releaseVelocity.y > 1f)
         {
-            float yBoost = xzMagnitude * 0.66f;
+            float yBoost = xzMagnitude * 0.75f;
             adjustedVelocity.y += yBoost;
         }
         adjustedVelocity.x *= 1.5f;

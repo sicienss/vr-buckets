@@ -22,7 +22,7 @@ public class HoopTrigger : MonoBehaviour
                     return;
                 }
 
-                float threePointThreshold = 4; // distance in meters for 3-pointers // TODO: Don't hardcode this here
+                float threePointThreshold = 3; // distance in meters for 3-pointers // TODO: Don't hardcode this here
                 int scoreToAward = basketball.shotDistance > threePointThreshold ? 3 : 2;
                 Debug.Log($"[{GameManager.instance.realtime.clientID}] Awarding score to {basketball.owner.Model.playerName}");
                 basketball.owner.Model.playerScore += scoreToAward;

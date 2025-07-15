@@ -107,9 +107,10 @@ public class Basketball : MonoBehaviour
         rb.isKinematic = false;
         rb.useGravity = true;
 
-        //StartCoroutine(AdjustThrowDirectionNextFrame(args));
+        Vector3 toHoop = GameObject.Find("Rim").transform.position - transform.position;
+        shotDistance = new Vector3(toHoop.x, 0f, toHoop.z).magnitude;
 
-        // Identify which hand released the object
+        // Identify which controller released the grab interactable
         var interactor = args.interactorObject.transform;
         if (interactor == null) return;
 
@@ -120,55 +121,44 @@ public class Basketball : MonoBehaviour
         else if (interactor.name.ToLower().Contains("right"))
             releasingNode = XRNode.RightHand;
         else
-            return; // Unknown hand
+            return;
 
-        // Get the releasing device
+        // Get releasing device
         var device = InputDevices.GetDeviceAtXRNode(releasingNode);
 
-        // Get velocity from the releasing hand
+        // Get velocity from releasing device
         Vector3 releaseVelocity = Vector3.zero;
         Vector3 releaseAngularVelocity = Vector3.zero;
         device.TryGetFeatureValue(CommonUsages.deviceVelocity, out releaseVelocity);
         device.TryGetFeatureValue(CommonUsages.deviceAngularVelocity, out releaseAngularVelocity);
 
-        // Adjust velocity for gamefeel -- translate some of the XZ force to Y axis, and boost XZ
-        Vector3 adjustedVelocity = releaseVelocity;
-        float xzMagnitude = new Vector3(releaseVelocity.x, 0f, releaseVelocity.z).magnitude;
-        if (releaseVelocity.y > 1f)
-        {
-            float yBoost = xzMagnitude * 0.75f;
-            adjustedVelocity.y += yBoost;
-        }
-        adjustedVelocity.x *= 1.5f;
-        adjustedVelocity.z *= 1.5f;
+        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text = $"Release vel: {releaseVelocity}";
+        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text += $"\nAngular vel: {releaseAngularVelocity}";
 
-        // Apply velocity to rb
+        float velocityScalar = 1.5f;
+        Vector3 adjustedVelocity = releaseVelocity * velocityScalar; // scale by some amount
+        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text += $"\nVel scalar: {velocityScalar}";
+
+        // Use the camera's right-facing axis as flick reference
+        Vector3 camRight = interactor.parent.parent.Find("Main Camera").right.normalized;
+
+        // Use dot product to get how much the wrist is rotating around the camera’s right axis
+        float upwardFlick = Vector3.Dot(releaseAngularVelocity, camRight);
+        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text += $"\nUpward flick: {upwardFlick}";
+
+        // Ignore downward flicks
+        float flickBoost = 0f;
+        if (upwardFlick > 0f)
+        {
+            flickBoost = upwardFlick * 0.05f; // can tune this (0.1 is too strong)
+            adjustedVelocity.y += flickBoost;
+        }
+        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text += $"\nFlick boost: {flickBoost}";
+        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text += $"\nFinal vel: {adjustedVelocity}";
+
+        // Apply result
         rb.linearVelocity = adjustedVelocity;
         rb.angularVelocity = releaseAngularVelocity;
-    }
-
-    private IEnumerator AdjustThrowDirectionNextFrame(SelectExitEventArgs args)
-    {
-        yield return null; // Let XR Toolkit apply its velocity
-
-        Vector3 velocity = rb.linearVelocity;
-
-        // Take some of the horizontal force (XZ plane)
-        Vector3 horizontal = new Vector3(velocity.x, 0f, velocity.z);
-        float horizontalMagnitude = horizontal.magnitude;
-
-        // Convert a fraction of horizontal force into vertical boost
-        float arcFactor = 0.5f; // tune this!
-        float extraY = horizontalMagnitude * arcFactor;
-
-        // Apply it
-        velocity.y += extraY;
-
-        //// Also boost XZ
-        //velocity.x *= 1.25f;
-        //velocity.z *= 1.25f;
-
-        rb.linearVelocity = velocity;
     }
 
     private void Update()
@@ -256,7 +246,7 @@ public class Basketball : MonoBehaviour
             Vector3 currentVelocity = rb.linearVelocity;
 
             // Blend current velocity with hoop direction
-            float assistStrength = 0.2f; // Tune this! 0 = no help, 1 = full redirect
+            float assistStrength = 0.33f; // Tune this! 0 = no help, 1 = full redirect
             Vector3 assistedVelocity = Vector3.Lerp(currentVelocity, toHoop * currentVelocity.magnitude, assistStrength);
 
             rb.linearVelocity = assistedVelocity;

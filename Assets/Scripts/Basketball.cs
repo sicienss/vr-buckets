@@ -132,7 +132,8 @@ public class Basketball : MonoBehaviour
         device.TryGetFeatureValue(CommonUsages.deviceVelocity, out releaseVelocity);
         device.TryGetFeatureValue(CommonUsages.deviceAngularVelocity, out releaseAngularVelocity);
 
-        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text = $"Release vel: {releaseVelocity}";
+        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text = $"Debug Panel\n";
+        GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text += $"\nRelease vel: {releaseVelocity}";
         GameObject.Find("DebugLabel").GetComponent<TMPro.TMP_Text>().text += $"\nAngular vel: {releaseAngularVelocity}";
 
         float velocityScalar = 1.5f;

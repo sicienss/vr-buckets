@@ -241,7 +241,7 @@ public class GameManager : RealtimeComponent<GameManagerModel>
     {
         TMP_Text label = GameObject.Find("TimerLabel")?.GetComponent<TMP_Text>();
 
-        int matchDurationSeconds = 60; // TODO: don't hardcode this here
+        int matchDurationSeconds = 90; // TODO: don't hardcode this here
         for (int i = matchDurationSeconds; i >= 1; i--)
         {
             if (label != null) label.text = i.ToString();

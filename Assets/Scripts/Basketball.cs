@@ -247,7 +247,7 @@ public class Basketball : MonoBehaviour
             Vector3 currentVelocity = rb.linearVelocity;
 
             // Blend current velocity with hoop direction
-            float assistStrength = 0.33f; // Tune this! 0 = no help, 1 = full redirect
+            float assistStrength = 0.25f; // Tune this! 0 = no help, 1 = full redirect
             Vector3 assistedVelocity = Vector3.Lerp(currentVelocity, toHoop * currentVelocity.magnitude, assistStrength);
 
             rb.linearVelocity = assistedVelocity;

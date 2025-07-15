@@ -218,7 +218,7 @@ public class Basketball : MonoBehaviour
         // Reset shot streak
         if (collision.gameObject.CompareTag("Ground"))
         {
-            if (owner != null && !hasScored)
+            if (owner != null && isThrown && !hasScored)
             {
                 // Only the client that owns the player updates their own model
                 if (owner.realtimeView.isOwnedLocally)
